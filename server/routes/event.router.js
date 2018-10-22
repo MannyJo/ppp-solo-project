@@ -6,6 +6,7 @@ const router = express.Router();
  * GET route for sending event list
  */
 router.get('/', (req, res) => {
+    console.log('in /api/event GET');
     pool.query(`
         SELECT
             ROW_NUMBER() OVER (ORDER BY "start_date" ASC) as "number",
@@ -36,7 +37,25 @@ router.get('/', (req, res) => {
  * POST route template
  */
 router.post('/', (req, res) => {
-    res.sendStatus(200);
+    console.log('in /api/event POST');
+    res.sendStatus(201);
+});
+
+/**
+ * DELETE route
+ */
+router.delete('/:id', (req, res) => {
+    console.log('in /api/event DELETE');
+    
+    pool.query(`
+        DELETE FROM "event"
+        WHERE "id" = $1 ;
+    `, [ req.params.id ]).then(() => {
+        res.sendStatus(200);
+    }).catch(error => {
+        console.log('Error getting event list :', error);
+        res.sendStatus(500);
+    });
 });
 
 module.exports = router;

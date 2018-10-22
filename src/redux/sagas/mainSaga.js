@@ -8,7 +8,7 @@ function* eventList() {
           withCredentials: true,
         };
 
-        const response = yield axios.get('/api/eventlist', config);
+        const response = yield axios.get('/api/event', config);
         
         yield put({ type: 'GET_EVENT_LIST', payload: response.data });
     } catch(error) {
@@ -16,8 +16,24 @@ function* eventList() {
     }
 }
 
+function* deleteEvent(action) {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+        console.log(action.payload);
+        yield axios.delete(`/api/event/${action.payload}`, config);
+        
+        yield put({ type: 'EVENT_LIST' });
+    } catch(error) {
+        console.log('Event delete request failed', error);
+    }
+}
+
 function* mainSaga() {
     yield takeLatest('EVENT_LIST', eventList);
+    yield takeLatest('DELETE_EVENT', deleteEvent);
 }
 
 export default mainSaga;

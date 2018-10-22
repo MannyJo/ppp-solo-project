@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 class MainPage extends Component {
+    handleDeleteClick = eventId => () => {
+        console.log('delete button has been clicked');
+        this.props.dispatch({ type: 'DELETE_EVENT', payload: eventId });
+    }
 
     componentDidMount = () => {
         this.props.dispatch({ type: 'EVENT_LIST' });
@@ -34,7 +37,7 @@ class MainPage extends Component {
                                     <td>{event.title}</td>
                                     <td>{event.end_date}</td>
                                     <td><button>Update</button></td>
-                                    <td><button>Delete</button></td>
+                                    <td><button onClick={this.handleDeleteClick(event.id)}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>
