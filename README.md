@@ -18,7 +18,8 @@ Create a new database called `prime_app` and create a `person` table:
 ```SQL
 CREATE TABLE person (
     id SERIAL PRIMARY KEY,
-    username VARCHAR (80) UNIQUE NOT NULL,
+    user_name VARCHAR (80) NOT NULL,
+    user_email VARCHAR (100) UNIQUE NOT NULL,
     password VARCHAR (1000) NOT NULL
 );
 ```

@@ -8,7 +8,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  pool.query('SELECT id, username FROM person WHERE id = $1', [id]).then((result) => {
+  pool.query('SELECT id, user_name, user_email FROM "user" WHERE id = $1', [id]).then((result) => {
     // Handle Errors
     const user = result && result.rows && result.rows[0];
 
@@ -28,9 +28,9 @@ passport.deserializeUser((id, done) => {
 // Does actual work of logging in
 passport.use('local', new LocalStrategy({
   passReqToCallback: true,
-  usernameField: 'username',
-}, ((req, username, password, done) => {
-    pool.query('SELECT * FROM person WHERE username = $1', [username])
+  usernameField: 'userEmail',
+}, ((req, userEmail, password, done) => {
+    pool.query('SELECT * FROM "user" WHERE user_email = $1', [userEmail])
       .then((result) => {
         const user = result && result.rows && result.rows[0];
         if (user && encryptLib.comparePassword(password, user.password)) {

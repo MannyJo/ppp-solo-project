@@ -4,17 +4,19 @@ import {connect} from 'react-redux';
 class RegisterPage extends Component {
   state = {
     username: '',
+    userEmail: '',
     password: '',
   };
 
   registerUser = (event) => {
     event.preventDefault();
 
-    if (this.state.username && this.state.password) {
+    if (this.state.username && this.state.password && this.state.userEmail) {
       this.props.dispatch({
         type: 'REGISTER',
         payload: {
           username: this.state.username,
+          userEmail: this.state.userEmail,
           password: this.state.password,
         },
       });
@@ -50,6 +52,17 @@ class RegisterPage extends Component {
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="userEmail">
+              Email:
+              <input
+                type="text"
+                name="userEmail"
+                value={this.state.userEmail}
+                onChange={this.handleInputChangeFor('userEmail')}
               />
             </label>
           </div>
