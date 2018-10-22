@@ -9,9 +9,10 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 
 import AboutPage from '../AboutPage/AboutPage';
-import UserPage from '../UserPage/UserPage';
+// import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import MainPage from '../MainPage/MainPage';
+import NewInvitation from '../NewInvitation/NewInvitation';
 
 import './App.css';
 
@@ -39,15 +40,15 @@ class App extends Component {
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the 'Login' or 'Register' page.
             Even though it seems like they are different pages, the user is always on localhost:3000/home */}
-            {/* <ProtectedRoute
-              exact
-              path="/home"
-              component={UserPage}
-            /> */}
             <ProtectedRoute
               exact
               path="/main"
               component={MainPage}
+            />
+            <ProtectedRoute
+              exact
+              path="/new"
+              component={NewInvitation}
             />
             {/* This works the same as the other protected route, except that if the user is logged in,
             they will see the info page instead. */}

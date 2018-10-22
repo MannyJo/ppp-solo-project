@@ -31,9 +31,9 @@ function* deleteEvent(action) {
     }
 }
 
-function* mainSaga() {
+function* eventSaga() {
     yield takeLatest('EVENT_LIST', eventList);
     yield takeLatest('DELETE_EVENT', deleteEvent);
 }
 
-export default mainSaga;
+export default eventSaga;
