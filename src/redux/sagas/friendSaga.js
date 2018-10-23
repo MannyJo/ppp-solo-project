@@ -11,6 +11,7 @@ function* friendList() {
         const response = yield axios.get('/api/friend', config);
 
         yield put({ type: 'GET_FRIEND_LIST', payload: response.data });
+        yield put({ type: 'GET_FRIEND_LIST_BY_GROUP_ID', payload: { friendList: response.data, groupId: '0' }});
     } catch (error) {
         console.log('Friend list get request failed', error);
     }

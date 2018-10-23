@@ -9,7 +9,7 @@ function* groupList() {
         };
 
         const response = yield axios.get('/api/group', config);
-        console.log(response.data);
+        
         yield put({ type: 'GET_GROUP_LIST', payload: response.data });
     } catch (error) {
         console.log('Group list get request failed', error);
