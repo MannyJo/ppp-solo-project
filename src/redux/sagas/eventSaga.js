@@ -4,14 +4,14 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* eventList() {
     try {
         const config = {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true,
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
         };
 
         const response = yield axios.get('/api/event', config);
-        
+
         yield put({ type: 'GET_EVENT_LIST', payload: response.data });
-    } catch(error) {
+    } catch (error) {
         console.log('Event list get request failed', error);
     }
 }
@@ -22,11 +22,11 @@ function* deleteEvent(action) {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
         };
-        console.log(action.payload);
-        yield axios.delete(`/api/event/${action.payload}`, config);
         
+        yield axios.delete(`/api/event/${action.payload}`, config);
+
         yield put({ type: 'EVENT_LIST' });
-    } catch(error) {
+    } catch (error) {
         console.log('Event delete request failed', error);
     }
 }
