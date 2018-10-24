@@ -51,4 +51,22 @@ router.post('/', (req, res) => {
     });
 });
 
+/**
+ * DELETE route templete
+ */
+router.delete('/:id', (req, res) => {
+    console.log('in /api/group DELETE');
+
+    pool.query(`
+        DELETE FROM "group"
+        WHERE "id" = $1 ;
+    `, [ req.params.id ])
+    .then(() => {
+        res.sendStatus(200);
+    }).catch(error => {
+        console.log('Error deleting a group :', error);
+        res.sendStatus(500);
+    });
+});
+
 module.exports = router;

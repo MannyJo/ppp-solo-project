@@ -175,9 +175,6 @@ class NewInvitation extends Component {
                     </table>
                     <button type="submit">Send</button>
                 </form>
-                <pre>
-                    {JSON.stringify(this.props.imgName, null, 2)}
-                </pre>
             </div>
         );
     }
@@ -187,7 +184,6 @@ const mapStateToProps = state => ({
     groupList: state.groupList,
     friendList: state.friendList.friendList,
     friendListByGroupId: state.friendList.friendListByGroupId,
-    imgName: state.imgName,
 });
 
 export default connect(mapStateToProps)(withRouter(NewInvitation));

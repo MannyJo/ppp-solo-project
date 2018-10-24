@@ -12,9 +12,16 @@ class GroupPage extends Component {
         });
     }
 
+    handleDeleteClick = group => () => {
+        if(group.members > 0) {
+            alert('Can remove this group because of the members');
+        } else if(window.confirm('Want to delete?')) {
+            this.props.dispatch({ type: 'DELETE_GROUP', payload: group });
+        }
+    }
+
     handleSubmit = event => {
         event.preventDefault();
-        // console.log('submit');
         this.props.dispatch({ type: 'ADD_GROUP', payload: this.state });
         this.setState({ newGroupName: '' });
     }
@@ -47,15 +54,11 @@ class GroupPage extends Component {
                                 <td>{group.group_name}</td>
                                 <td>{group.members}</td>
                                 <td><button>Update</button></td>
-                                <td><button>Delete</button></td>
+                                <td><button onClick={this.handleDeleteClick(group)}>Delete</button></td>
                             </tr>    
                         )}
                     </tbody>
                 </table>
-                <pre>
-                    {JSON.stringify(this.state, null, 2)}
-                    {JSON.stringify(this.props.groupList, null, 2)}
-                </pre>
             </div>
         );
     }
