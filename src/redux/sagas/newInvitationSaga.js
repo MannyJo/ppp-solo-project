@@ -1,9 +1,13 @@
-import { call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
 function* makeNewInvitation(action) {
     try{
-        yield call(axios.post, '/api/event', action.payload);
+        const imgNameResponse = yield call(axios.post, '/api/event/fileupload', action.payload.imageFile);
+
+        yield call(axios.post, '/api/event', {...action.payload.form, fileName: imgNameResponse.data.fileName});
+
+        yield put({ type: 'EVENT_LIST' });
     } catch(error) {
         console.log('Error with make new invitation:', error);
     }

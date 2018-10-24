@@ -2,22 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import axios from 'axios';
-
 class NewInvitation extends Component {
     state = {
         title: 'This is my first title',
-        imageUrl: '/documentation/images/vscode-debug-bar.png',
         message: 'This is my first message',
         secretMessage: 'This is my first secret message',
         endDate: '2018-10-28',
         location: '1305 Madison street, St. Paul, MN',
-        // title: '',
-        // imageUrl: '',
-        // message: '',
-        // secretMessage: '',
-        // endDate: '',
-        // location: '',
         selectedFriends: [],
     }
 
@@ -50,12 +41,7 @@ class NewInvitation extends Component {
             return false;
         });
 
-        this.setState({
-            selectedFriends: [
-                ...this.state.selectedFriends,
-                ...selectedFriend,
-            ]
-        });
+        this.setState({ selectedFriends: [...this.state.selectedFriends, ...selectedFriend] });
     }
 
     handleDeleteClick = id => event => {
@@ -81,9 +67,7 @@ class NewInvitation extends Component {
             return friend;
         });
 
-        this.setState({
-            selectedFriends: [...selectedFriends,]
-        });
+        this.setState({ selectedFriends: [...selectedFriends,] });
     }
 
     // change state data by property name when the input data changes
@@ -94,20 +78,15 @@ class NewInvitation extends Component {
     handleSubmitClick = event => {
         event.preventDefault();
 
-        let data = new FormData();
-        data.append('file', this.uploadInput.files[0]);
+        if (this.state.selectedFriends.length === 0) {
+            alert('You should select at least one friend');
+        } else {
+            let imageFile = new FormData();
+            imageFile.append('file', this.uploadInput.files[0]);
 
-        console.log(this.uploadInput.files[0]);
-        console.log(data);
-
-        fetch('/api/event', {
-            method: 'POST',
-            // url: '/api/event',
-            body: data
-        });
-
-        // this.props.dispatch({ type: 'MAKE_NEW_INVITATION', payload: this.state });
-        // this.props.history.push('/main');
+            this.props.dispatch({ type: 'MAKE_NEW_INVITATION', payload: { imageFile: imageFile, form: this.state } });
+            this.props.history.push('/main');
+        }
     }
 
     // get group and friend lists from redux and saga
@@ -116,55 +95,28 @@ class NewInvitation extends Component {
         this.props.dispatch({ type: 'FRIEND_LIST' });
     }
 
-    changeImage = event => {
-        let input = event.target;
-        if (input.files.length > 0) {
-            //   let file = input.files[0];
-            //   console.log(input.files)
-            //   console.log("You chose", file.name);
-            //   if (file.type) console.log("It has type", file.type);
-            for (let file of Array.from(input.files)) {
-                let reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    console.log("File", file.name, "starts with",
-                        reader.result);
-                });
-                reader.readAsText(file);
-                let abc = new File()
-            }
-        }
-    }
-
     loadImageFile = () => {
-        // if (window.FileReader) {
-            let ImagePre;
-            let ImgReader = new FileReader();
-            // let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
+        let ImagePre;
+        let ImgReader = new FileReader();
+        let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
 
-            ImgReader.onload = (Event) => {
-                if (!ImagePre) {
-                    let newPreview = document.getElementById("imagePreview");
-                    ImagePre = new Image();
-                    ImagePre.style.width = "200px";
-                    ImagePre.style.height = "140px";
-                    newPreview.appendChild(ImagePre);
-                }
-                ImagePre.src = Event.target.result;
-            
-                this.setState({
-                    imageUrl: Event.target.result
-                });
-            };
-            let img = document.getElementById("image").files;
+        ImgReader.onload = (Event) => {
+            if (!ImagePre) {
+                let newPreview = document.getElementById("imagePreview");
+                ImagePre = new Image();
+                ImagePre.style.width = "200px";
+                ImagePre.style.height = "140px";
+                newPreview.appendChild(ImagePre);
+            }
+            ImagePre.src = Event.target.result;
+        };
+        let img = document.getElementById("image").files;
 
-            // if (!fileType.test(img[0].type)) {
-            //     alert("Not an image file");
-            //     return;
-            // }
-            ImgReader.readAsDataURL(img[0]);
-            
-        // }
-        
+        if (!fileType.test(img[0].type)) {
+            alert("Not an image file");
+            return;
+        }
+        ImgReader.readAsDataURL(img[0]);
     }
 
     render() {
@@ -176,9 +128,9 @@ class NewInvitation extends Component {
                     <input id="title" name="title" type="text" value={this.state.title} onChange={this.handleChangeFor('title')} /><br />
                     <label htmlFor="image">Image : </label>
                     <input id="image" name="image" type="file"
-                        // value={this.state.imageUrl} 
                         ref={(ref) => { this.uploadInput = ref; }}
-                        onChange={this.loadImageFile} /><br />
+                        onChange={this.loadImageFile}
+                    /><br />
                     <div id="imagePreview"></div>
                     <label htmlFor="message">Message : </label>
                     <input id="message" name="message" type="text" value={this.state.message} onChange={this.handleChangeFor('message')} /><br />
@@ -224,7 +176,7 @@ class NewInvitation extends Component {
                     <button type="submit">Send</button>
                 </form>
                 <pre>
-                    {JSON.stringify(this.state, null, 2)}
+                    {JSON.stringify(this.props.imgName, null, 2)}
                 </pre>
             </div>
         );
@@ -235,6 +187,7 @@ const mapStateToProps = state => ({
     groupList: state.groupList,
     friendList: state.friendList.friendList,
     friendListByGroupId: state.friendList.friendListByGroupId,
+    imgName: state.imgName,
 });
 
 export default connect(mapStateToProps)(withRouter(NewInvitation));

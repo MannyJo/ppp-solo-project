@@ -3,6 +3,8 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const fs = require('fs');
 
+const pathname = './server/uploadImages/';
+
 /**
  * GET route for sending event list
  */
@@ -65,73 +67,90 @@ router.post('/', (req, res) => {
         ) VALUES 
     `;
 
-    let imageFile = req.files.file;
+    pool.query(insertEvent,[
+        req.user.id,
+        req.body.title,
+        req.body.endDate,
+        req.body.message,
+        req.body.secretMessage,
+        req.body.location,
+        req.body.lng,
+        req.body.lat,
+        req.protocol+'://'+req.get('host')+'/image/'+req.body.fileName
+    ]).then(results => {
+        const eventId = results.rows[0].id;
+        let params = [];
+        let chunks = [];
 
-    let writeStream = fs.createWriteStream(`./server/uploadImages/${Date.now()}.jpg`);
+        req.body.selectedFriends.forEach(friend => {
+            let valueClause = [];
+            Object.keys(friend).forEach(property => {
+                if(property === 'id'){
+                    params.push(eventId);
+                    valueClause.push('$'+params.length);
+                    params.push(friend[property]);
+                    valueClause.push('$'+params.length);
+                } else if(property === 'checked'){
+                    params.push(friend[property]);
+                    valueClause.push('$'+params.length);
+                }
+            });
+            chunks.push('('+valueClause.join(', ')+')');
+        });
 
-    writeStream.write(imageFile.data, 'base64');
-    writeStream.on('finish', () => {  
-        console.log('wrote all data to file');
+        pool.query(insertEventFriend + chunks.join(', ') + ';', params)
+            .then(() => {
+                res.sendStatus(201);
+            }).catch(error => {
+                console.log('Error inserting new invitation data :', error);
+                pool.query('DELETE FROM "event" WHERE "id" = $1;', [eventId]);
+                res.sendStatus(500);
+            });
+    }).catch(error => {
+        console.log('Error inserting new invitation data :', error);
+        res.sendStatus(500);
     });
+});
+
+router.post('/fileupload', (req, res) => {
+    try{
+        console.log(req.files);
+        if(req.files === null || req.files === {} || req.files === ''){
+            res.sendStatus(200);
+        } else {
+            //////////// FILE UPLOAD /////////////
+            let imageFile = req.files.file;
+            let extension = imageFile.name.split('.').pop();
+        
+            let fileName = Date.now();
+            let writeStream = fs.createWriteStream(`./server/uploadImages/${fileName}.${extension}`);
+        
+            writeStream.write(imageFile.data, 'base64');
+            writeStream.on('finish', () => {
+                console.log('wrote all data to file');
+            });
+            writeStream.end();
+            //////////// FILE UPLOAD /////////////
     
-    // close the stream
-    writeStream.end();  
+            res.send({fileName: fileName+'.'+extension});
+        }
+    } catch(error) {
+        console.log('Error making image :', error);
+        res.sendStatus(500);
+    }
+});
 
-    res.sendStatus(200);
+router.get('/image/:imgName', (req, res) => {
+    let file = pathname + req.params.imgName;
+    let extension = file.split('.').pop();
 
-    // imageFile.mv(`${__dirname}/public/123.jpg`, (err) => {
-    //     if (err) {
-    //         console.log(err);
-    //         res.sendStatus(500);
-    //     }
-    //     res.sendStatus(200);
-    //     //   res.json({file: `public/${req.body.filename}.jpg`});
-    // });
-
-
-    // pool.query(insertEvent,[
-    //     req.user.id,
-    //     req.body.title,
-    //     req.body.endDate,
-    //     req.body.message,
-    //     req.body.secretMessage,
-    //     req.body.location,
-    //     req.body.lng,
-    //     req.body.lat,
-    //     req.body.imageUrl
-    // ]).then(results => {
-    //     const eventId = results.rows[0].id;
-    //     let params = [];
-    //     let chunks = [];
-
-    //     req.body.selectedFriends.forEach(friend => {
-    //         let valueClause = [];
-    //         Object.keys(friend).forEach(property => {
-    //             if(property === 'id'){
-    //                 params.push(eventId);
-    //                 valueClause.push('$'+params.length);
-    //                 params.push(friend[property]);
-    //                 valueClause.push('$'+params.length);
-    //             } else if(property === 'checked'){
-    //                 params.push(friend[property]);
-    //                 valueClause.push('$'+params.length);
-    //             }
-    //         });
-    //         chunks.push('('+valueClause.join(', ')+')');
-    //     });
-
-    //     pool.query(insertEventFriend + chunks.join(', ') + ';', params)
-    //         .then(() => {
-    //             res.sendStatus(201);
-    //         }).catch(error => {
-    //             console.log('Error inserting new invitation data :', error);
-    //             pool.query('DELETE FROM "event" WHERE "id" = $1;', [eventId]);
-    //             res.sendStatus(500);
-    //         });
-    // }).catch(error => {
-    //     console.log('Error inserting new invitation data :', error);
-    //     res.sendStatus(500);
-    // });
+    let fileToLoad = fs.readFileSync(file);
+    if (extension === 'png') {
+        res.writeHead(200, { 'Content-Type': 'image/png' });
+    } else {
+        res.writeHead(200, { 'Content-Type': 'image/jpg' });
+    }
+    res.end(fileToLoad, 'binary');
 });
 
 /**
