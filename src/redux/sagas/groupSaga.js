@@ -16,8 +16,24 @@ function* groupList() {
     }
 }
 
+function* addGroup(action) {
+    try{
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+
+        yield axios.post('/api/group', action.payload, config);
+        
+        yield put({ type: 'GROUP_LIST' });
+    } catch (error) {
+        console.log('Group add request failed', error);
+    }
+}
+
 function* groupSaga() {
     yield takeLatest('GROUP_LIST', groupList);
+    yield takeLatest('ADD_GROUP', addGroup);
 }
 
 export default groupSaga;

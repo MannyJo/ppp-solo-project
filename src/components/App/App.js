@@ -13,6 +13,7 @@ import AboutPage from '../AboutPage/AboutPage';
 import InfoPage from '../InfoPage/InfoPage';
 import MainPage from '../MainPage/MainPage';
 import NewInvitation from '../NewInvitation/NewInvitation';
+import GroupPage from '../GroupPage/GroupPage';
 
 import './App.css';
 
@@ -49,6 +50,11 @@ class App extends Component {
               exact
               path="/new"
               component={NewInvitation}
+            />
+            <ProtectedRoute
+              exact
+              path="/group"
+              component={GroupPage}
             />
             {/* This works the same as the other protected route, except that if the user is logged in,
             they will see the info page instead. */}

@@ -89,12 +89,6 @@ class NewInvitation extends Component {
         }
     }
 
-    // get group and friend lists from redux and saga
-    componentDidMount = () => {
-        this.props.dispatch({ type: 'GROUP_LIST' });
-        this.props.dispatch({ type: 'FRIEND_LIST' });
-    }
-
     loadImageFile = () => {
         let ImagePre;
         let ImgReader = new FileReader();
@@ -117,6 +111,12 @@ class NewInvitation extends Component {
             return;
         }
         ImgReader.readAsDataURL(img[0]);
+    }
+
+    // get group and friend lists from redux and saga
+    componentDidMount = () => {
+        this.props.dispatch({ type: 'GROUP_LIST' });
+        this.props.dispatch({ type: 'FRIEND_LIST' });
     }
 
     render() {
