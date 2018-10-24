@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+import axios from 'axios';
 
 class NewInvitation extends Component {
     state = {
@@ -28,13 +31,13 @@ class NewInvitation extends Component {
         }).filter(friend => {
             let count = 0; // counter to check the same id is in the table
             this.state.selectedFriends.forEach(addedFriend => {
-                if(friend.id === addedFriend.id){
+                if (friend.id === addedFriend.id) {
                     count++;
                 }
             });
 
             // if there is already the same friend in the table, return nothing
-            if(count > 0){
+            if (count > 0) {
                 return false;
             }
 
@@ -59,7 +62,7 @@ class NewInvitation extends Component {
         event.preventDefault();
         const selectedFriends = this.state.selectedFriends.filter(friend => (friend.id !== id));
 
-        this.setState({ selectedFriends: [ ...selectedFriends ] });
+        this.setState({ selectedFriends: [...selectedFriends] });
     }
 
     // whenever group changes, the friend list changes properly as well
@@ -72,14 +75,14 @@ class NewInvitation extends Component {
 
     handleCheckedClick = id => event => {
         const selectedFriends = this.state.selectedFriends.map(friend => {
-            if(friend.id === id){
+            if (friend.id === id) {
                 return { ...friend, checked: event.target.checked, };
             }
             return friend;
         });
 
         this.setState({
-            selectedFriends: [ ...selectedFriends, ]
+            selectedFriends: [...selectedFriends,]
         });
     }
 
@@ -90,7 +93,21 @@ class NewInvitation extends Component {
 
     handleSubmitClick = event => {
         event.preventDefault();
-        this.props.dispatch({ type: 'MAKE_NEW_INVITATION', payload: this.state });
+
+        let data = new FormData();
+        data.append('file', this.uploadInput.files[0]);
+
+        console.log(this.uploadInput.files[0]);
+        console.log(data);
+
+        fetch('/api/event', {
+            method: 'POST',
+            // url: '/api/event',
+            body: data
+        });
+
+        // this.props.dispatch({ type: 'MAKE_NEW_INVITATION', payload: this.state });
+        // this.props.history.push('/main');
     }
 
     // get group and friend lists from redux and saga
@@ -99,15 +116,70 @@ class NewInvitation extends Component {
         this.props.dispatch({ type: 'FRIEND_LIST' });
     }
 
+    changeImage = event => {
+        let input = event.target;
+        if (input.files.length > 0) {
+            //   let file = input.files[0];
+            //   console.log(input.files)
+            //   console.log("You chose", file.name);
+            //   if (file.type) console.log("It has type", file.type);
+            for (let file of Array.from(input.files)) {
+                let reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    console.log("File", file.name, "starts with",
+                        reader.result);
+                });
+                reader.readAsText(file);
+                let abc = new File()
+            }
+        }
+    }
+
+    loadImageFile = () => {
+        // if (window.FileReader) {
+            let ImagePre;
+            let ImgReader = new FileReader();
+            // let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
+
+            ImgReader.onload = (Event) => {
+                if (!ImagePre) {
+                    let newPreview = document.getElementById("imagePreview");
+                    ImagePre = new Image();
+                    ImagePre.style.width = "200px";
+                    ImagePre.style.height = "140px";
+                    newPreview.appendChild(ImagePre);
+                }
+                ImagePre.src = Event.target.result;
+            
+                this.setState({
+                    imageUrl: Event.target.result
+                });
+            };
+            let img = document.getElementById("image").files;
+
+            // if (!fileType.test(img[0].type)) {
+            //     alert("Not an image file");
+            //     return;
+            // }
+            ImgReader.readAsDataURL(img[0]);
+            
+        // }
+        
+    }
+
     render() {
         return (
             <div>
                 <h2>Make an Invitation</h2>
-                <form onSubmit={this.handleSubmitClick}>
+                <form onSubmit={this.handleSubmitClick} encType="multipart/form-data">
                     <label htmlFor="title">Title : </label>
                     <input id="title" name="title" type="text" value={this.state.title} onChange={this.handleChangeFor('title')} /><br />
                     <label htmlFor="image">Image : </label>
-                    <input id="image" name="image" type="text" value={this.state.imageUrl} onChange={this.handleChangeFor('imageUrl')} /><br />
+                    <input id="image" name="image" type="file"
+                        // value={this.state.imageUrl} 
+                        ref={(ref) => { this.uploadInput = ref; }}
+                        onChange={this.loadImageFile} /><br />
+                    <div id="imagePreview"></div>
                     <label htmlFor="message">Message : </label>
                     <input id="message" name="message" type="text" value={this.state.message} onChange={this.handleChangeFor('message')} /><br />
                     <label htmlFor="secretMsg">Secret Message : </label>
@@ -165,4 +237,4 @@ const mapStateToProps = state => ({
     friendListByGroupId: state.friendList.friendListByGroupId,
 });
 
-export default connect(mapStateToProps)(NewInvitation);
+export default connect(mapStateToProps)(withRouter(NewInvitation));

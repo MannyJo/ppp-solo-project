@@ -3,8 +3,7 @@ import axios from 'axios';
 
 function* makeNewInvitation(action) {
     try{
-        yield call(axios.post, action.payload);
-        // console.log(action.payload);
+        yield call(axios.post, '/api/event', action.payload);
     } catch(error) {
         console.log('Error with make new invitation:', error);
     }

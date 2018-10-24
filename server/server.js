@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const sessionMiddleware = require('./modules/session-middleware');
 
+const fileUpload = require('express-fileupload');
 const passport = require('./strategies/user.strategy');
 
 // Route includes
@@ -14,6 +15,7 @@ const groupRouter = require('./routes/group.router');
 const friendRouter = require('./routes/friend.router');
 
 // Body parser middleware
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
