@@ -127,7 +127,7 @@ class NewInvitation extends Component {
                     <label htmlFor="title">Title : </label>
                     <input id="title" name="title" type="text" value={this.state.title} onChange={this.handleChangeFor('title')} /><br />
                     <label htmlFor="image">Image : </label>
-                    <input id="image" name="image" type="file"
+                    <input id="image" name="image" type="file" multiple={false}
                         ref={(ref) => { this.uploadInput = ref; }}
                         onChange={this.loadImageFile}
                     /><br />

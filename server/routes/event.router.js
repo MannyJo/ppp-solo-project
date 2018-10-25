@@ -76,7 +76,7 @@ router.post('/', (req, res) => {
         req.body.location,
         req.body.lng,
         req.body.lat,
-        req.body.fileName?req.protocol+'://'+req.get('host')+'/image/'+req.body.fileName:null
+        req.body.fileName?req.protocol+'://'+req.get('host')+'/api/event/image/'+req.body.fileName:null
     ]).then(results => {
         const eventId = results.rows[0].id;
         let params = [];

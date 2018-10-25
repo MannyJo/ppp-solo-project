@@ -35,7 +35,7 @@ CREATE TABLE "event" (
 
 CREATE TABLE event_friend (
 	event_id INTEGER REFERENCES "event"(id) ON DELETE CASCADE,
-	friend_id INTEGER REFERENCES friend(id),
+	friend_id INTEGER REFERENCES friend(id) ON DELETE CASCADE,
     show_secret BOOLEAN NOT NULL,
 	attend_cd INTEGER /* 0:NO, 1:YES, 2:DON'T KNOW */
 );

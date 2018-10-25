@@ -3,28 +3,43 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class EventDetail extends Component {
+    handleBackClick = () => {
+        console.log(this.props.history);
+        this.props.history.goBack();
+    }
 
     componentDidMount = () => {
         const id = window.location.hash.split('/').pop();
-        
         this.props.dispatch({ type: 'EVENT_DETAIL', payload: id });
     }
 
     render() {
+        const detail = this.props.detail;
+        const members = this.props.members;
         return (
-            <div>
+            <div style={{textAlign: 'center'}}>
                 <h2>Event Detail Page</h2>
                 <div>
-                    {/* <div>{this.props.detail.title}</div> */}
+                    <div>{detail.title}</div>
+                    <div><img src={detail.img_url} style={{height: '200px'}} /></div>
+                    <div>{detail.message}</div>
+                    <div>{detail.secret_message}</div>
+                    <div>Date : {detail.end_date}</div>
+                    <div>Address : {detail.address}</div>
+                    <div>
+                        Members : 
+                        {members.map(member => <div key={member.id}>{member.friend_name} </div>)}
+                    </div>
+                    <div><button onClick={this.handleBackClick}>Back</button></div>
                 </div>
-                <pre>
-                    {JSON.stringify(this.props.state, null, 2)}
-                </pre>
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({ state });
+const mapStateToProps = ({ eventDetail }) => ({
+    detail: eventDetail.detail,
+    members: eventDetail.members,
+});
 
 export default connect(mapStateToProps)(withRouter(EventDetail));
