@@ -75,9 +75,6 @@ class GroupPage extends Component {
                         )}
                     </tbody>
                 </table>
-                <pre>
-                    {JSON.stringify(this.state, null, 2)}
-                </pre>
             </div>
         );
     }

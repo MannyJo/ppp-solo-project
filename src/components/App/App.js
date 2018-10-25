@@ -15,6 +15,7 @@ import MainPage from '../MainPage/MainPage';
 import NewInvitation from '../NewInvitation/NewInvitation';
 import GroupPage from '../GroupPage/GroupPage';
 import FriendPage from '../FriendPage/FriendPage';
+import EventDetail from '../EventDetail/EventDetail';
 
 import './App.css';
 
@@ -61,6 +62,11 @@ class App extends Component {
               exact
               path="/friend"
               component={FriendPage}
+            />
+            <ProtectedRoute
+              // exact
+              path="/detail"
+              component={EventDetail}
             />
             {/* This works the same as the other protected route, except that if the user is logged in,
             they will see the info page instead. */}

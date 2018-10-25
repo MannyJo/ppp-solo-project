@@ -57,7 +57,7 @@ router.delete('/:id', (req, res) => {
     `, [ req.params.id ]).then(() => {
         res.sendStatus(201);
     }).catch(error => {
-        console.log('Error inserting friends :', error);
+        console.log('Error deleting friends :', error);
         res.sendStatus(500);
     });
 });
