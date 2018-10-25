@@ -7,7 +7,7 @@ function* eventDetail(action) {
 
         const detailResponse = yield call(axios.get, `/api/detail/${id}`);
 
-        yield put({ type: 'GET_EVENT_DETAIL', payload: detailResponse.data });
+        yield put({ type: 'GET_EVENT_DETAIL', payload: detailResponse.data[0] });
     } catch(error) {
         console.log('error getting event detail :', error);
     }

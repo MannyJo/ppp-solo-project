@@ -13,6 +13,7 @@ const userRouter = require('./routes/user.router');
 const eventRouter = require('./routes/event.router');
 const groupRouter = require('./routes/group.router');
 const friendRouter = require('./routes/friend.router');
+const eventDetail = require('./routes/detail.router');
 
 // Body parser middleware
 app.use(fileUpload());
@@ -31,6 +32,7 @@ app.use('/api/user', userRouter);
 app.use('/api/event', eventRouter);
 app.use('/api/group', groupRouter);
 app.use('/api/friend', friendRouter);
+app.use('/api/detail', eventDetail);
 
 // Serve static files
 app.use(express.static('build'));
