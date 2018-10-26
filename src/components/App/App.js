@@ -7,7 +7,6 @@ import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
-import InfoPage from '../InfoPage/InfoPage';
 import MainPage from '../MainPage/MainPage';
 import NewInvitation from '../NewInvitation/NewInvitation';
 import GroupPage from '../GroupPage/GroupPage';
@@ -64,13 +63,6 @@ class App extends Component {
             <ProtectedRoute
               path="/detail"
               component={EventDetail}
-            />
-            {/* This works the same as the other protected route, except that if the user is logged in,
-            they will see the info page instead. */}
-            <ProtectedRoute
-              exact
-              path="/info"
-              component={InfoPage}
             />
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
