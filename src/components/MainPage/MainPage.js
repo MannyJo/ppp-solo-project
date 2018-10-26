@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import EventList from '../EventList/EventList';
+
+const styles = theme => ({
+    subTitle: {
+        marginLeft: '12vw',
+        fontSize: '20px',
+    },
+    right: {
+        textAlign: 'right',
+        marginRight: '12vw',
+    },
+    welcome: {
+        marginLeft: '10vw',
+    },
+});
 
 class MainPage extends Component {
     handleNewClick = () => {
@@ -10,14 +25,15 @@ class MainPage extends Component {
     }
 
     render() {
+        const classes = this.props.classes;
         return (
             <div>
-                <h1 id="welcome">
-                    Welcome, { this.props.user.user_name }!
-                </h1>
+                <h1 className={classes.welcome}>Welcome, {this.props.user.user_name}!</h1>
                 <div>
-                    <div>- Your History</div>
-                    <div><button onClick={this.handleNewClick}>New Invitation</button></div>
+                    <div className={classes.subTitle}>- Your History</div>
+                    <div className={classes.right}>
+                        <Button color="primary" onClick={this.handleNewClick}>New Invitation</Button>
+                    </div>
                     <EventList />
                 </div>
             </div>
@@ -26,7 +42,7 @@ class MainPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+    user: state.user,
 });
 
-export default withRouter(connect(mapStateToProps)(MainPage));
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(MainPage)));
