@@ -6,6 +6,7 @@ import eventList from './eventReducer';
 import groupList from './groupReducer';
 import friendList from './friendReducer';
 import eventDetail from './eventDetailReducer';
+import guestInfo from './guestReducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   groupList, // will have user's group list
   friendList,
   eventDetail,
+  guestInfo,
 });
 
 export default rootReducer;

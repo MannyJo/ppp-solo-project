@@ -16,7 +16,7 @@ import NewInvitation from '../NewInvitation/NewInvitation';
 import GroupPage from '../GroupPage/GroupPage';
 import FriendPage from '../FriendPage/FriendPage';
 import EventDetail from '../EventDetail/EventDetail';
-import GuestLogin from '../GuestLogin/GuestLogin';
+import GuestPage from '../GuestPage/GuestPage';
 
 import './App.css';
 
@@ -41,9 +41,9 @@ class App extends Component {
               component={AboutPage}
             />
             <Route
-              // exact
-              path="/guest"
-              component={GuestLogin}
+              exact
+              path="/guest/:id"
+              component={GuestPage}
             />
             {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
