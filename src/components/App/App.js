@@ -9,7 +9,6 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 
 import AboutPage from '../AboutPage/AboutPage';
-// import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import MainPage from '../MainPage/MainPage';
 import NewInvitation from '../NewInvitation/NewInvitation';
@@ -70,7 +69,6 @@ class App extends Component {
               component={FriendPage}
             />
             <ProtectedRoute
-              // exact
               path="/detail"
               component={EventDetail}
             />

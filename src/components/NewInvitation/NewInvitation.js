@@ -92,7 +92,7 @@ class NewInvitation extends Component {
     loadImageFile = () => {
         let ImagePre;
         let ImgReader = new FileReader();
-        let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
+        // let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
 
         ImgReader.onload = (Event) => {
             if (!ImagePre) {
@@ -106,10 +106,10 @@ class NewInvitation extends Component {
         };
         let img = document.getElementById("image").files;
 
-        if (!fileType.test(img[0].type)) {
-            alert("Not an image file");
-            return;
-        }
+        // if (!fileType.test(img[0].type)) {
+        //     alert("Not an image file");
+        //     return;
+        // }
         ImgReader.readAsDataURL(img[0]);
     }
 
@@ -129,6 +129,7 @@ class NewInvitation extends Component {
                     <label htmlFor="image">Image : </label>
                     <input id="image" name="image" type="file" multiple={false}
                         ref={(ref) => { this.uploadInput = ref; }}
+                        accept="image/*"
                         onChange={this.loadImageFile}
                     /><br />
                     <div id="imagePreview"></div>

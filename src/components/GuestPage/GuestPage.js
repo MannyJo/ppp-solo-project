@@ -18,6 +18,10 @@ class GuestPage extends Component {
         this.setState({ email: event.target.value });
     }
 
+    changeUser = () => {
+        this.setState({ email: 'ihavenothing@but.money' });
+    }
+
     componentDidMount = () => {
         this.props.dispatch({ type: 'IS_VERIFIED', payload: false });
     }
@@ -25,18 +29,21 @@ class GuestPage extends Component {
     render() {
         const detail = this.props.invitation;
         return (
-            <div>
+            <div style={{textAlign: 'center'}}>
                 {
                     !this.props.isVerified?
                     (
                         <form onSubmit={this.handleLoginClick}>
-                            <label htmlFor="guestLogin">Email : </label>
+                            <label 
+                                htmlFor="guestLogin"
+                                onClick={this.changeUser}
+                                >Email : </label>
                             <input type="email" id="guestLogin" value={this.state.email} onChange={this.handleChange} placeholder="example@example.com" /><br />
                             <input type="submit" value="Login" />
                         </form>
                     ) :
                     (
-                        <div style={{textAlign: 'center'}}>
+                        <div>
                             <div style={{fontSize: '25px'}}>{detail.title}</div>
                             <div><img src={detail.img_url} style={{height: '200px'}} /></div>
                             <div>{detail.message}</div>

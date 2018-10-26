@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+    center: {
+        textAlign: 'center',
+    }, 
+    title: {
+        width: '40%'
+    }
+});
 
 class EventList extends Component {
     handleDeleteClick = eventId => () => {
@@ -14,18 +27,19 @@ class EventList extends Component {
     }
 
     render() {
+        const classes = this.props.classes;
         return (
-            <tr>
-                <td>{this.props.event.number}</td>
-                <td>
-                    <button onClick={this.sendToDetail}>{this.props.event.title}</button>
-                </td>
-                <td>{this.props.event.end_date}</td>
-                <td><button>Update</button></td>
-                <td><button onClick={this.handleDeleteClick(this.props.event.id)}>Delete</button></td>
-            </tr>
+            <TableRow>
+                <TableCell numeric>{this.props.event.number}</TableCell>
+                <TableCell onClick={this.sendToDetail} className={classes.title}>
+                    {this.props.event.title}
+                </TableCell>
+                <TableCell className={classes.center}>{this.props.event.end_date}</TableCell>
+                <TableCell className={classes.center}><Button color="primary">Update</Button></TableCell>
+                <TableCell className={classes.center}><Button color="secondary" onClick={this.handleDeleteClick(this.props.event.id)}>Delete</Button></TableCell>
+            </TableRow>
         );
     }
 }
 
-export default connect()(withRouter(EventList));
+export default connect()(withRouter(withStyles(styles)(EventList)));
