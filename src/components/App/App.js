@@ -7,8 +7,6 @@ import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
-
-import AboutPage from '../AboutPage/AboutPage';
 import InfoPage from '../InfoPage/InfoPage';
 import MainPage from '../MainPage/MainPage';
 import NewInvitation from '../NewInvitation/NewInvitation';
@@ -34,11 +32,6 @@ class App extends Component {
             <Redirect exact from="/" to="/main" />
             {/* Visiting localhost:3000/about will show the about page.
             This is a route anyone can see, no login necessary */}
-            <Route
-              exact
-              path="/about"
-              component={AboutPage}
-            />
             <Route
               exact
               path="/guest/:id"

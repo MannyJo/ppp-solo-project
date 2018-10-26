@@ -92,7 +92,6 @@ class NewInvitation extends Component {
     loadImageFile = () => {
         let ImagePre;
         let ImgReader = new FileReader();
-        // let fileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png|image\/x\-xwindowdump|image\/x\-portable\-bitmap)$/i;
 
         ImgReader.onload = (Event) => {
             if (!ImagePre) {
@@ -106,10 +105,6 @@ class NewInvitation extends Component {
         };
         let img = document.getElementById("image").files;
 
-        // if (!fileType.test(img[0].type)) {
-        //     alert("Not an image file");
-        //     return;
-        // }
         ImgReader.readAsDataURL(img[0]);
     }
 

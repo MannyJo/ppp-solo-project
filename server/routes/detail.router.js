@@ -31,7 +31,8 @@ router.get('/:id', (req, res) => {
         SELECT
             "fr"."id",
             "fr"."friend_name",
-            "ef"."show_secret"
+            "ef"."show_secret",
+            "ef"."attend_cd"
         FROM
             "event_friend" AS "ef"
             LEFT JOIN "friend" AS "fr"
