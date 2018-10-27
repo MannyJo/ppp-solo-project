@@ -7,6 +7,7 @@ import groupList from './groupReducer';
 import friendList from './friendReducer';
 import eventDetail from './eventDetailReducer';
 import guestInfo from './guestReducer';
+import dialogOpen from './dialogReducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   friendList,
   eventDetail,
   guestInfo,
+  dialogOpen,
 });
 
 export default rootReducer;

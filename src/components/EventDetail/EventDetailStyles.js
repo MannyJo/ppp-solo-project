@@ -1,10 +1,13 @@
 const styles = theme => ({
+    displayFlex: {
+        textAlign: 'center',
+    },
     detailFrame: {
         width: '500px',
         textAlign: 'center',
         border: '1px solid rgba(0,0,0,0.7)',
         borderRadius: '10px',
-        marginLeft: 'calc(50% - 250px)',
+        margin: 'auto',
         boxShadow: '0 0 10px 3px rgba(0,0,0,0.2)',
         backgroundColor: 'white',
     },

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import Delete from '@material-ui/icons/Delete';
 
 const styles = theme => ({
     center: {
@@ -35,8 +36,11 @@ class EventList extends Component {
                     {this.props.event.title}
                 </TableCell>
                 <TableCell className={classes.center}>{this.props.event.end_date}</TableCell>
-                <TableCell className={classes.center}><Button color="primary">Update</Button></TableCell>
-                <TableCell className={classes.center}><Button color="secondary" onClick={this.handleDeleteClick(this.props.event.id)}>Delete</Button></TableCell>
+                <TableCell className={classes.center}>
+                    <Button color="secondary" onClick={this.handleDeleteClick(this.props.event.id)}>
+                        <Delete />
+                    </Button>
+                </TableCell>
             </TableRow>
         );
     }

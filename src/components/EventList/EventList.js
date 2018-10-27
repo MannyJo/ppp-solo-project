@@ -42,7 +42,6 @@ class EventList extends Component {
                             <TableCell numeric>#</TableCell>
                             <TableCell className={classes.center}>Title</TableCell>
                             <TableCell className={classes.center}>Exp. Date</TableCell>
-                            <TableCell className={classes.center}>Update</TableCell>
                             <TableCell className={classes.center}>Delete</TableCell>
                         </TableRow>
                     </TableHead>

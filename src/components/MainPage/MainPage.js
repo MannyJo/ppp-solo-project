@@ -32,7 +32,7 @@ class MainPage extends Component {
                 <div>
                     <div className={classes.subTitle}>- Your History</div>
                     <div className={classes.right}>
-                        <Button color="primary" onClick={this.handleNewClick}>New Invitation</Button>
+                        <Button variant="outlined" color="primary" onClick={this.handleNewClick}>New Invitation</Button>
                     </div>
                     <EventList />
                 </div>

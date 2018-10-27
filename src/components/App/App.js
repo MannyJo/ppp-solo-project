@@ -8,11 +8,12 @@ import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import MainPage from '../MainPage/MainPage';
-import NewInvitation from '../NewInvitation/NewInvitation';
+import InvitationForm from '../InvitationForm/InvitationForm';
 import GroupPage from '../GroupPage/GroupPage';
 import FriendPage from '../FriendPage/FriendPage';
 import EventDetail from '../EventDetail/EventDetail';
 import GuestPage from '../GuestPage/GuestPage';
+import Dialog from '../CustomDialog/CustomDialog';
 
 import './App.css';
 
@@ -48,7 +49,7 @@ class App extends Component {
             <ProtectedRoute
               exact
               path="/new"
-              component={NewInvitation}
+              component={InvitationForm}
             />
             <ProtectedRoute
               exact
@@ -68,6 +69,7 @@ class App extends Component {
             <Route render={() => <h1>404</h1>} />
           </Switch>
           <Footer />
+          <Dialog />
         </div>
       </Router>
   )}
