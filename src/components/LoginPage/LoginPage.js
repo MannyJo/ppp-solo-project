@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import './LoginPage.css';
 
 class LoginPage extends Component {
   state = {
-    // username: '',
     userEmail: '',
     password: '',
   };
@@ -11,12 +11,10 @@ class LoginPage extends Component {
   login = (event) => {
     event.preventDefault();
 
-    if ( //this.state.username && 
-      this.state.password && this.state.userEmail) {
+    if (this.state.password && this.state.userEmail) {
       this.props.dispatch({
         type: 'LOGIN',
         payload: {
-          // username: this.state.username,
           userEmail: this.state.userEmail,
           password: this.state.password,
         },
@@ -34,7 +32,7 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div style={{textAlign: 'center'}}>
+      <div>
         {this.props.errors.loginMessage && (
           <h2
             className="alert"
@@ -43,53 +41,48 @@ class LoginPage extends Component {
             {this.props.errors.loginMessage}
           </h2>
         )}
-        <form onSubmit={this.login}>
-          <h1>Login</h1>
-          {/* <div>
-            <label htmlFor="username">
-              Username:
-              <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              />
+        <div className="loginFrame">
+          <form onSubmit={this.login} className="loginForm">
+            <h1 className="loginLogo">PPP</h1>
+            <div>
+              <label htmlFor="userEmail">
+                Email
             </label>
-          </div> */}
-          <div>
-            <label htmlFor="userEmail">
-              Email:
               <input
                 type="email"
+                id="userEmail"
                 name="userEmail"
+                placeholder="Enter Email"
+                autoFocus
                 value={this.state.userEmail}
                 onChange={this.handleInputChangeFor('userEmail')}
               />
+            </div>
+            <div>
+              <label htmlFor="password">
+                Password
             </label>
-          </div>
-          <div>
-            <label htmlFor="password">
-              Password:
               <input
                 type="password"
                 name="password"
+                placeholder="Enter Password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
               />
-            </label>
-          </div>
-          <div>
-            <input
-              className="log-in"
-              type="submit"
-              name="submit"
-              value="Log In"
-            />
-          </div>
-        </form>
-        <center>
-          <button type="button" className="link-button" onClick={() => {this.props.dispatch({type: 'SET_TO_REGISTER_MODE'})}}>Register</button>
-        </center>
+            </div>
+            <div>
+              <input
+                className="log-in"
+                type="submit"
+                name="submit"
+                value="Log In"
+              />
+            </div>
+          </form>
+          <center className="registerButton">
+            <button type="button" className="link-button" onClick={() => { this.props.dispatch({ type: 'SET_TO_REGISTER_MODE' }) }}>Register</button>
+          </center>
+        </div>
       </div>
     );
   }

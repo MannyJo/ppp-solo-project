@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 class RegisterPage extends Component {
   state = {
@@ -21,7 +21,7 @@ class RegisterPage extends Component {
         },
       });
     } else {
-      this.props.dispatch({type: 'REGISTRATION_INPUT_ERROR'});
+      this.props.dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
     }
   } // end registerUser
 
@@ -42,53 +42,58 @@ class RegisterPage extends Component {
             {this.props.errors.registrationMessage}
           </h2>
         )}
-        <form onSubmit={this.registerUser}>
-          <h1>Register User</h1>
-          <div>
-            <label htmlFor="username">
-              Username:
+        <div className="loginFrame">
+          <form onSubmit={this.registerUser} className="loginForm">
+            <h1>Register User</h1>
+            <div>
+              <label htmlFor="username">
+                Username
+              </label>
               <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.handleInputChangeFor('username')}
               />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="userEmail">
-              Email:
+            </div>
+            <div>
+              <label htmlFor="userEmail">
+                Email
+              </label>
               <input
-                type="text"
-                name="userEmail"
-                value={this.state.userEmail}
-                onChange={this.handleInputChangeFor('userEmail')}
+                  type="text"
+                  id="userEmail"
+                  name="userEmail"
+                  value={this.state.userEmail}
+                  onChange={this.handleInputChangeFor('userEmail')}
               />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="password">
-              Password:
+            </div>
+            <div>
+              <label htmlFor="password">
+                Password
+              </label>
               <input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleInputChangeFor('password')}
               />
-            </label>
-          </div>
-          <div>
-            <input
-              className="register"
-              type="submit"
-              name="submit"
-              value="Register"
-            />
-          </div>
-        </form>
-        <center>
-          <button type="button" className="link-button" onClick={() => {this.props.dispatch({type: 'SET_TO_LOGIN_MODE'})}}>Login</button>
-        </center>
+            </div>
+            <div>
+              <input
+                className="register"
+                type="submit"
+                name="submit"
+                value="Register"
+              />
+            </div>
+          </form>
+          <center>
+            <button type="button" className="link-button" onClick={() => { this.props.dispatch({ type: 'SET_TO_LOGIN_MODE' }) }}>Login</button>
+          </center>
+        </div>
       </div>
     );
   }

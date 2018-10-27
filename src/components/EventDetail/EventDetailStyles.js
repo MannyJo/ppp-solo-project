@@ -5,7 +5,8 @@ const styles = theme => ({
         border: '1px solid rgba(0,0,0,0.7)',
         borderRadius: '10px',
         marginLeft: 'calc(50% - 250px)',
-        boxShadow: '0 0 10px 3px rgba(0,0,0,0.5)',
+        boxShadow: '0 0 10px 3px rgba(0,0,0,0.2)',
+        backgroundColor: 'white',
     },
     title: {
         fontSize: '40px',
