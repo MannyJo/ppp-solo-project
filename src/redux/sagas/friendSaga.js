@@ -17,7 +17,7 @@ function* friendList() {
     }
 }
 
-function* addFridend(action) {
+function* addFriend(action) {
     try {
         const config = {
             headers: { 'Content-Type': 'application/json' },
@@ -32,7 +32,7 @@ function* addFridend(action) {
     }
 }
 
-function* deleteFridend(action) {
+function* deleteFriend(action) {
     try {
         const config = {
             headers: { 'Content-Type': 'application/json' },
@@ -48,10 +48,26 @@ function* deleteFridend(action) {
     }
 }
 
+function* updateFriend(action) {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+
+        yield axios.put(`/api/friend/update`, action.payload, config);
+
+        yield put({ type: 'FRIEND_LIST' });
+    } catch (error) {
+        console.log('Friend delete request failed', error);
+    }
+}
+
 function* friendSaga() {
     yield takeLatest('FRIEND_LIST', friendList);
-    yield takeLatest('ADD_FRIEND', addFridend);
-    yield takeLatest('DELETE_FRIEND', deleteFridend);
+    yield takeLatest('ADD_FRIEND', addFriend);
+    yield takeLatest('DELETE_FRIEND', deleteFriend);
+    yield takeLatest('UPDATE_FRIEND', updateFriend);
 }
 
 export default friendSaga;

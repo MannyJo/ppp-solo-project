@@ -62,4 +62,29 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+router.put('/update', (req, res) => {
+    console.log('in /api/friend PUT');
+
+    pool.query(`
+        UPDATE
+            "friend"
+        SET
+            "friend_name" = $1,
+            "friend_email" = $2,
+            "group_id" = $3
+        WHERE
+            "id" = $4 ;
+    `, [
+        req.body.friendName,
+        req.body.friendEmail,
+        req.body.groupId,
+        req.body.id
+    ]).then(() => {
+        res.sendStatus(200);
+    }).catch(error => {
+        console.log('Error updating friend info');
+        res.sendStatus(500);
+    });
+});
+
 module.exports = router;

@@ -32,7 +32,17 @@ const friendListByGroupId = (state = [], action) => {
     }
 }
 
+const friendInfo = (state = {}, action) => {
+    switch (action.type) {
+        case 'UPDATE_FRIEND_INFO':
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     friendList,
     friendListByGroupId,
+    friendInfo,
 });

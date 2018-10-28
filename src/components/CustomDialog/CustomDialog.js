@@ -14,29 +14,33 @@ class CustomDialog extends Component {
     }
 
     render() {
+        const ComponentToProtect = this.props.dialogContent;
         return (
             <Dialog
                 open={this.props.dialogOpen}
                 onClose={this.handleClose}
                 scroll='paper'
             >
-            <DialogTitle>Subscribe</DialogTitle>
-            <DialogContent>
-                Hello?
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={this.handleClose} color="primary">
-                    Update
-                </Button>
-            </DialogActions>
-        </Dialog>
+                {/* <DialogTitle>Subscribe</DialogTitle> */}
+                <DialogContent>
+                    <ComponentToProtect />
+                </DialogContent>
+                {/* <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={this.handleClose} color="primary">
+                        Update
+                    </Button>
+                </DialogActions> */}
+            </Dialog>
         );
     }
 }
 
-const mapStateToProps = ({ dialogOpen }) => ({ dialogOpen });
+const mapStateToProps = ({ dialogInfo }) => ({
+    dialogOpen: dialogInfo.dialogOpen,
+    dialogContent: dialogInfo.dialogContent,
+});
 
 export default connect(mapStateToProps)(CustomDialog);

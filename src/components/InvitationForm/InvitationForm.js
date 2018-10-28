@@ -70,11 +70,11 @@ const styles = theme => ({
 
 class InvitationForm extends Component {
     state = {
-        title: 'This is my first title',
-        message: 'This is my first message',
-        secretMessage: 'This is my first secret message',
-        endDate: '2018-10-28',
-        location: '1305 Madison street, St. Paul, MN',
+        title: '',
+        message: '',
+        secretMessage: '',
+        endDate: '',
+        location: '',
         selectedFriends: [],
     }
 

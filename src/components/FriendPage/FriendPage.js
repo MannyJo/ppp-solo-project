@@ -9,60 +9,34 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
+import FriendPageForm from '../FriendPageForm/FriendPageForm';
+import FriendPageFormUpdate from '../FriendPageFormUpdate/FriendPageFormUpdate';
 
 const styles = theme => ({
     frame: {
-        width: '1000px',
+        minWidth: '800px',
+        maxWidth: '1000px',
+        overflowX: 'auto',
         margin: 'auto',
-    },
-    form: {
-        textAlign: 'center',
-        marginBottom: '10px',
-    },
-    input: {
-        padding: '12px 20px',
-        margin: '8px 0',
-        display: 'inline-block',
-        border: '1px solid #ccc',
-        boxSizing: 'border-box',
-        borderRadius: '5px',
     },
     center: {
         textAlign: 'center',
-    }
+    },
 });
 
 class GroupPage extends Component {
-    state = {
-        friendName: '',
-        friendEmail: '',
-        groupId: '',
-    }
-
-    handleChangeFor = property => event => {
-        this.setState({
-            [property]: event.target.value,
-        });
-    }
-
     handleDeleteClick = friend => () => {
         if(window.confirm('Want to delete?')) {
             this.props.dispatch({ type: 'DELETE_FRIEND', payload: friend });
         }
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-        if(this.state.groupId === '' || this.state.groupId === null){
-            alert('Group has to be selected');
-        } else {
-            this.props.dispatch({ type: 'ADD_FRIEND', payload: this.state });
-            this.setState({ friendName: '', friendEmail: '', groupId: '' });
-        }
+    handleUpdateFriend = friend => event => {
+        this.props.dispatch({ type: 'UPDATE_FRIEND_INFO', payload: friend });
+        this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
     componentDidMount = () => {
-        this.props.dispatch({ type: 'GROUP_LIST' });
         this.props.dispatch({ type: 'FRIEND_LIST' });
     }
 
@@ -72,69 +46,47 @@ class GroupPage extends Component {
             <div>
                 <h2>Friends</h2>
                 <div className={classes.frame}>
-                    <form onSubmit={this.handleSubmit} className={classes.form}>
-                        <label htmlFor="friendInput">Friend : </label>
-                        <input 
-                            type="text" 
-                            id="friendInput" 
-                            value={this.state.friendName} 
-                            placeholder="Friend's Name"
-                            onChange={this.handleChangeFor('friendName')} 
-                            className={classes.input}
-                            required 
-                        />&nbsp;&nbsp;
-                        <label htmlFor="emailInput">E-Mail : </label>
-                        <input 
-                            type="email" 
-                            id="emailInput" 
-                            value={this.state.friendEmail} 
-                            placeholder="Friend's E-Mail"
-                            onChange={this.handleChangeFor('friendEmail')} 
-                            className={classes.input}
-                            required 
-                        />&nbsp;&nbsp;
-                        <label htmlFor="groupList">Group : </label>
-                        <select id="groupList" name="groupList" onChange={this.handleChangeFor('groupId')} required>
-                            <option value="">select</option>
-                            {this.props.groupList.map(group =>
-                                <option key={group.id} value={group.id}>{group.group_name}</option>
-                            )}
-                        </select>&nbsp;
-                        <Button variant="outlined" color="primary" type="submit">Add Group</Button>
-                    </form>
+                    <FriendPageForm />
                     <Paper>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Group</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>E-Mail</TableCell>
-                                    <TableCell>Update</TableCell>
-                                    <TableCell>Delete</TableCell>
+                                    <TableCell className={classes.center}>Group</TableCell>
+                                    <TableCell className={classes.center}>Name</TableCell>
+                                    <TableCell className={classes.center}>E-Mail</TableCell>
+                                    <TableCell className={classes.center}>Update</TableCell>
+                                    <TableCell className={classes.center}>Delete</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {this.props.friendList.map(friend => 
                                     <TableRow key={friend.id}>
-                                        <TableCell>{friend.group_name}</TableCell>
-                                        <TableCell>{friend.friend_name}</TableCell>
-                                        <TableCell>{friend.friend_email}</TableCell>
-                                        <TableCell><Button>Update</Button></TableCell>
-                                        <TableCell><Button color="secondary" onClick={this.handleDeleteClick(friend)}><Delete /></Button></TableCell>
+                                        <TableCell className={classes.center}>{friend.group_name}</TableCell>
+                                        <TableCell className={classes.center}>{friend.friend_name}</TableCell>
+                                        <TableCell className={classes.center}>{friend.friend_email}</TableCell>
+                                        <TableCell className={classes.center}>
+                                            <Button onClick={this.handleUpdateFriend(friend)}>Update</Button>
+                                        </TableCell>
+                                        <TableCell className={classes.center}>
+                                            <Button color="secondary" onClick={this.handleDeleteClick(friend)}>
+                                                <Delete />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>    
                                 )}
                             </TableBody>
                         </Table>
                     </Paper>
                 </div>
+                {this.props.dialogOpen?<FriendPageFormUpdate />:null}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({ 
-    groupList: state.groupList,
-    friendList: state.friendList.friendList 
+    dialogOpen: state.dialogOpen,
+    friendList: state.friendList.friendList,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(GroupPage));
