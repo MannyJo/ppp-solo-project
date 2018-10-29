@@ -86,6 +86,7 @@ router.post('/', (req, res) => {
         let params = [];
         let chunks = [];
 
+        // TODO : change this using Promise.all([])
         req.body.selectedFriends.forEach(friend => {
             let valueClause = [];
             Object.keys(friend).forEach(property => {
@@ -119,14 +120,15 @@ router.post('/', (req, res) => {
 router.post('/fileupload', (req, res) => {
     try{
         console.log(req.files);
-        if(req.files === null || req.files === {} || req.files === ''){
+        if(req.files === null || req.files === {} || req.files === '' || req.files === undefined){
             res.sendStatus(200);
         } else {
             //////////// FILE UPLOAD /////////////
             let imageFile = req.files.file;
+
+            let fileName = Date.now();
             let extension = imageFile.name.split('.').pop();
         
-            let fileName = Date.now();
             let writeStream = fs.createWriteStream(`./server/uploadImages/${fileName}.${extension}`);
         
             writeStream.write(imageFile.data, 'base64');

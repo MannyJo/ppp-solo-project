@@ -8,8 +8,16 @@ import FacesIcon from '@material-ui/icons/Face';
 import Button from '@material-ui/core/Button'
 import styles from './EventDetailStyles';
 import InvitationFormUpdate from '../InvitationFormUpdate/InvitationFormUpdate';
+import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
+
+const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
 
 class EventDetail extends Component {
+    state = {
+        showingInfoWindow: false,
+        activeMarker: {},
+        selectedPlace: {},
+    }
 
     handleBackClick = () => {
         this.props.history.goBack();
@@ -17,6 +25,14 @@ class EventDetail extends Component {
 
     handleUpdateClick = () => {
         this.props.dispatch({ type: 'OPEN_DIALOG' });
+    }
+
+    onMarkerClick = (props, marker, e) => {
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true
+        });
     }
 
     componentDidMount = () => {
@@ -39,6 +55,37 @@ class EventDetail extends Component {
                         <div className={classes.secretMessage}>{detail.secret_message}</div>
                         <div className={classes.left}><div className={classes.label}>Date : </div> {detail.end_date}</div>
                         <div className={classes.left}><div className={classes.label}>Address : </div> {detail.address}</div>
+                        {detail.lat && detail.lng && detail.address &&
+                            <div style={{ width: '500px', height: '400px' }}>
+                                <Map
+                                    google={this.props.google}
+                                    center={{
+                                        lat: Number(detail.lat),
+                                        lng: Number(detail.lng)
+                                    }}
+                                    containerStyle={{ width: '450px', height: '350px', borderRadius: '10px' , marginLeft: '25px', marginTop: '25px' }}
+                                    style={{ width: '450px', height: '350px', borderRadius: '10px' }}
+                                    zoom={14}
+                                    visible={true}
+                                >
+                                    <Marker
+                                        title={'This is the party place'}
+                                        name={detail.title}
+                                        position={{ lat: detail.lat, lng: detail.lng }}
+                                        onClick={this.onMarkerClick}
+                                    />
+                                    <InfoWindow
+                                        marker={this.state.activeMarker}
+                                        visible={this.state.showingInfoWindow}
+                                    >
+                                        <div>
+                                            <h3>{this.state.selectedPlace.name}</h3>
+                                        </div>
+                                    </InfoWindow>
+                                </Map>
+                            </div>
+                        }
+                        <br />
                         <div>
                             <div className={classes.left}>
                                 <div className={classes.label}>
@@ -67,7 +114,7 @@ class EventDetail extends Component {
                         </div>
                     </div>
                 </div>
-                {this.props.dialogOpen?<InvitationFormUpdate />:null}
+                {this.props.dialogOpen ? <InvitationFormUpdate /> : null}
             </div>
         );
     }
@@ -79,4 +126,6 @@ const mapStateToProps = ({ eventDetail, dialogOpen }) => ({
     dialogOpen,
 });
 
-export default connect(mapStateToProps)(withRouter(withStyles(styles)(EventDetail)));
+export default GoogleApiWrapper({
+    apiKey: API_KEY
+})(connect(mapStateToProps)(withRouter(withStyles(styles)(EventDetail))));

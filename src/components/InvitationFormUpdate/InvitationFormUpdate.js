@@ -47,6 +47,7 @@ class InvitationFormUpdate extends Component {
         secretMessage: '',
         endDate: '',
         location: '',
+        img_url: '',
         selectedFriends: [],
     }
 
@@ -108,10 +109,33 @@ class InvitationFormUpdate extends Component {
         this.setState({ selectedFriends: [...this.state.selectedFriends, ...selectedFriend] });
     }
 
+    loadImageFile = () => {
+        let ImgReader = new FileReader();
+
+        ImgReader.onload = (Event) => {
+            let newPreview = document.getElementById("imagePreview");
+            let ImagePre = new Image();
+            
+            if(newPreview.hasChildNodes()){
+                newPreview.removeChild(newPreview.firstChild);
+            }
+
+            ImagePre.style.width = "100%";
+            newPreview.appendChild(ImagePre);
+            ImagePre.src = Event.target.result;
+        };
+
+        let img = document.getElementById("image").files;
+        ImgReader.readAsDataURL(img[0]);
+    }
+
     handleSubmitClick = event => {
         event.preventDefault();
-        console.log(this.state);
-        this.props.dispatch({ type: 'UPDATE_DETAIL', payload: this.state });
+
+        let imageFile = new FormData();
+        imageFile.append('file', this.uploadInput.files[0]);
+
+        this.props.dispatch({ type: 'UPDATE_DETAIL', payload: {...this.state, imageFile: imageFile} });
         this.props.dispatch({ type: 'CLOSE_DIALOG' });
     }
     
@@ -126,6 +150,7 @@ class InvitationFormUpdate extends Component {
             secretMessage: this.props.detail.secret_message,
             endDate: dateArr[2]+'-'+dateArr[0]+'-'+dateArr[1],
             location: this.props.detail.address,
+            img_url: this.props.detail.img_url,
             selectedFriends: this.props.members,
         });
     }
@@ -154,7 +179,9 @@ class InvitationFormUpdate extends Component {
                             onChange={this.loadImageFile}
                             className={classes.input}
                         />
-                        <div id="imagePreview"></div>
+                        <div id="imagePreview">
+                            <img src={this.state.img_url} width="100%" alt="Add image" />
+                        </div>
                         <label htmlFor="message">Message</label>
                         <input id="message" name="message" type="text"
                             value={this.state.message}

@@ -16,7 +16,10 @@ function* eventDetail(action) {
 
 function* updateDetail(action) {
     try {
-        yield call(axios.put, '/api/detail/update', action.payload);
+        const imgNameResponse = yield call(axios.post, '/api/event/fileupload', action.payload.imageFile);
+        const sendData = { ...action.payload, fileName: imgNameResponse.data.fileName };
+
+        yield call(axios.put, '/api/detail/update', sendData);
         yield put({ type: 'EVENT_DETAIL', payload: action.payload.id });
     } catch(error) {
         console.log('error updating event detail :', error);

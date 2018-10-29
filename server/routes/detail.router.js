@@ -61,7 +61,6 @@ router.get('/:id', (req, res) => {
 
 router.put('/update', (req, res) => {
     console.log('in /api/detial/update PUT');
-    console.log('request :', req.body);
 
     let updateEvent = `
         UPDATE "event"
@@ -70,9 +69,10 @@ router.put('/update', (req, res) => {
             "end_date" = $2,
             "message" = $3,
             "secret_message" = $4,
-            "address" = $5
+            "address" = $5,
+            "img_url" = $6
         WHERE
-            "id" = $6 ;
+            "id" = $7 ;
     `;
 
     let deleteEventFriend = `
@@ -98,6 +98,7 @@ router.put('/update', (req, res) => {
             req.body.message, 
             req.body.secretMessage, 
             req.body.location, 
+            req.body.fileName?req.protocol+'://'+req.get('host')+'/api/event/image/'+req.body.fileName:req.body.img_url,
             req.body.id, 
         ]), 
         pool.query(deleteEventFriend, [ req.body.id ])
