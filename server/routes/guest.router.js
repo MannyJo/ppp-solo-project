@@ -45,12 +45,4 @@ router.get('/:id/:email', (req, res) => {
     });
 });
 
-router.get('/invitation/:id/:email', (req, res) => {
-    const response = {
-
-    };
-
-    res.send(response);
-});
-
 module.exports = router;

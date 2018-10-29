@@ -6,9 +6,14 @@ import './Nav.css';
 
 const Nav = (props) => (
   <div className="nav">
+    {!window.location.hash.includes('guest') ?
     <Link to="/main">
       <h2 className="nav-title">Party Pooper Planner</h2>
-    </Link>
+    </Link> :
+    <h2 className="nav-title">Party Pooper Planner</h2>
+    }
+    
+    {!window.location.hash.includes('guest') && 
     <div className="nav-right">
       <Link className="nav-link" to="/main">
         {/* Show this link if they are logged in or not,
@@ -29,6 +34,7 @@ const Nav = (props) => (
         </>
       )}
     </div>
+    }
   </div>
 );
 
