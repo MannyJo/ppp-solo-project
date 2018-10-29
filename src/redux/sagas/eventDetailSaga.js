@@ -14,8 +14,18 @@ function* eventDetail(action) {
     }
 }
 
+function* updateDetail(action) {
+    try {
+        yield call(axios.put, '/api/detail/update', action.payload);
+        yield put({ type: 'EVENT_DETAIL', payload: action.payload.id });
+    } catch(error) {
+        console.log('error updating event detail :', error);
+    }
+}
+
 function* eventDetailSaga() {
     yield takeLatest('EVENT_DETAIL', eventDetail);
+    yield takeLatest('UPDATE_DETAIL', updateDetail);
 }
 
 export default eventDetailSaga;

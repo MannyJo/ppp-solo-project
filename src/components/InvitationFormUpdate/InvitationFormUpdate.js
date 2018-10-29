@@ -76,12 +76,48 @@ class InvitationFormUpdate extends Component {
         this.setState({ selectedFriends: [...selectedFriends] });
     }
 
+    handleAddClick = event => {
+        event.preventDefault();
+
+        let friendId = document.getElementById('friendList').value;
+
+        const selectedFriend = this.props.friendListByGroupId.map(friend => {
+            return { ...friend, checked: false };
+        }).filter(friend => {
+            let count = 0; // counter to check the same id is in the table
+            this.state.selectedFriends.forEach(addedFriend => {
+                if (friend.id === addedFriend.id) {
+                    count++;
+                }
+            });
+
+            // if there is already the same friend in the table, return nothing
+            if (count > 0) {
+                return false;
+            }
+
+            // 0: all
+            if (friendId === '0') {
+                return true;
+            } else if (Number(friendId) === friend.id) {
+                return true;
+            }
+            return false;
+        });
+
+        this.setState({ selectedFriends: [...this.state.selectedFriends, ...selectedFriend] });
+    }
+
     handleSubmitClick = event => {
         event.preventDefault();
         console.log(this.state);
+        this.props.dispatch({ type: 'UPDATE_DETAIL', payload: this.state });
+        this.props.dispatch({ type: 'CLOSE_DIALOG' });
     }
     
     componentDidMount = () => {
+        this.props.dispatch({ type: 'GROUP_LIST' });
+        this.props.dispatch({ type: 'FRIEND_LIST' });
         let dateArr = this.props.detail.end_date.split('/');
         this.setState({
             id: this.props.detail.id,

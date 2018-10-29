@@ -59,4 +59,66 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.put('/update', (req, res) => {
+    console.log('in /api/detial/update PUT');
+    console.log('request :', req.body);
+
+    let updateEvent = `
+        UPDATE "event"
+        SET
+            "title" = $1,
+            "end_date" = $2,
+            "message" = $3,
+            "secret_message" = $4,
+            "address" = $5
+        WHERE
+            "id" = $6 ;
+    `;
+
+    let deleteEventFriend = `
+        DELETE FROM "event_friend"
+        WHERE "event_id" = $1 ;
+    `;
+
+    let insertEventFriend = `
+        INSERT INTO "event_friend" (
+            "event_id",
+            "friend_id",
+            "show_secret",
+            "attend_cd"
+        ) VALUES (
+            $1, $2, $3, $4
+        );
+    `;
+
+    Promise.all([
+        pool.query(updateEvent, [ 
+            req.body.title, 
+            req.body.endDate, 
+            req.body.message, 
+            req.body.secretMessage, 
+            req.body.location, 
+            req.body.id, 
+        ]), 
+        pool.query(deleteEventFriend, [ req.body.id ])
+    ]).then(() => {
+        const insertFriends = req.body.selectedFriends.map(friend => (
+            pool.query(insertEventFriend, [
+                req.body.id, 
+                friend.id,
+                friend.show_secret,
+                friend.attend_cd
+            ])
+        ));
+        Promise.all(insertFriends)
+            .then(() => {
+                res.sendStatus(200);
+            }).catch(error => {
+                console.log('Error updating event friends info');
+            });
+    }).catch(error => {
+        console.log('Error updating event info');
+    });
+});
+
 module.exports = router;
