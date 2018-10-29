@@ -65,7 +65,9 @@ class GroupPage extends Component {
                                         <TableCell className={classes.center}>{friend.friend_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_email}</TableCell>
                                         <TableCell className={classes.center}>
-                                            <Button onClick={this.handleUpdateFriend(friend)}>Update</Button>
+                                            <Button onClick={this.handleUpdateFriend(friend)} color="primary">
+                                                Update
+                                            </Button>
                                         </TableCell>
                                         <TableCell className={classes.center}>
                                             <Button color="secondary" onClick={this.handleDeleteClick(friend)}>

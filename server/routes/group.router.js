@@ -69,4 +69,22 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+router.put('/update', (req, res) => {
+    console.log('in /api/group PUT');
+    
+    pool.query(`
+        UPDATE "group"
+        SET "group_name" = $1
+        WHERE "id" = $2 ;
+    `, [
+        req.body.groupName,
+        req.body.groupId
+    ]).then(() => {
+        res.sendStatus(200);
+    }).catch(error => {
+        console.log('Error updating a group :', error);
+        res.sendStatus(500);
+    });
+});
+
 module.exports = router;

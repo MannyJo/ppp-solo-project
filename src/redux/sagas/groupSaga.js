@@ -47,10 +47,26 @@ function* deleteGroup(action) {
     }
 }
 
+function* updateGroup(action) {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+
+        yield axios.put(`/api/group/update`, action.payload, config);
+
+        yield put({ type: 'GROUP_LIST' });
+    } catch (error) {
+        console.log('Group update request failed', error);
+    }
+}
+
 function* groupSaga() {
     yield takeLatest('GROUP_LIST', groupList);
     yield takeLatest('ADD_GROUP', addGroup);
     yield takeLatest('DELETE_GROUP', deleteGroup);
+    yield takeLatest('UPDATE_GROUP', updateGroup);
 }
 
 export default groupSaga;

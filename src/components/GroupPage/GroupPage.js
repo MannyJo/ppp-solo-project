@@ -8,6 +8,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import Delete from '@material-ui/icons/Delete';
+import GroupPageFormUpdate from '../GroupPageFormUpdate/GroupPageFormUpdate';
 
 const styles = theme => ({
     frame: {
@@ -33,6 +35,7 @@ const styles = theme => ({
 class GroupPage extends Component {
     state = {
         newGroupName: '',
+        updateGroup: '',
     }
 
     handleChangeFor = property => event => {
@@ -47,6 +50,11 @@ class GroupPage extends Component {
         } else if (window.confirm('Want to delete?')) {
             this.props.dispatch({ type: 'DELETE_GROUP', payload: group });
         }
+    }
+
+    handleUpdateClick = group => () => {
+        this.setState({ updateGroup: group });
+        this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
     handleSubmit = event => {
@@ -73,8 +81,11 @@ class GroupPage extends Component {
                             placeholder="Group Name"
                             onChange={this.handleChangeFor('newGroupName')} 
                             className={classes.input}
+                            required
                         />&nbsp;
-                        <Button variant="outlined" color="primary" type="submit">Add Group</Button>
+                        <Button variant="outlined" color="primary" type="submit">
+                            Add Group
+                        </Button>
                     </form>
                     <Paper>
                         <Table>
@@ -91,19 +102,26 @@ class GroupPage extends Component {
                                     <TableRow key={group.id}>
                                         <TableCell className={classes.center}>{group.group_name}</TableCell>
                                         <TableCell className={classes.center}>{group.members}</TableCell>
-                                        <TableCell className={classes.center}><Button color="primary">Update</Button></TableCell>
-                                        <TableCell className={classes.center}><Button color="secondary" onClick={this.handleDeleteClick(group)}>Delete</Button></TableCell>
+                                        <TableCell className={classes.center}>
+                                            <Button color="primary" onClick={this.handleUpdateClick(group)}>Update</Button>
+                                        </TableCell>
+                                        <TableCell className={classes.center}>
+                                            <Button color="secondary" onClick={this.handleDeleteClick(group)}>
+                                                <Delete />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
                     </Paper>
                 </div>
+                {this.props.dialogOpen?<GroupPageFormUpdate group={this.state.updateGroup} />:null}
             </div>
         );
     }
 }
 
-const mapStateToProps = ({ groupList }) => ({ groupList });
+const mapStateToProps = ({ groupList, dialogOpen }) => ({ groupList, dialogOpen });
 
 export default connect(mapStateToProps)(withStyles(styles)(GroupPage));

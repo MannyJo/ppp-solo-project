@@ -7,6 +7,7 @@ import TagFacesIcon from '@material-ui/icons/TagFaces';
 import FacesIcon from '@material-ui/icons/Face';
 import Button from '@material-ui/core/Button'
 import styles from './EventDetailStyles';
+import InvitationFormUpdate from '../InvitationFormUpdate/InvitationFormUpdate';
 
 class EventDetail extends Component {
 
@@ -66,14 +67,16 @@ class EventDetail extends Component {
                         </div>
                     </div>
                 </div>
+                {this.props.dialogOpen?<InvitationFormUpdate />:null}
             </div>
         );
     }
 }
 
-const mapStateToProps = ({ eventDetail }) => ({
+const mapStateToProps = ({ eventDetail, dialogOpen }) => ({
     detail: eventDetail.detail,
     members: eventDetail.members,
+    dialogOpen,
 });
 
 export default connect(mapStateToProps)(withRouter(withStyles(styles)(EventDetail)));
