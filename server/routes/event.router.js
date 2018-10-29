@@ -26,10 +26,14 @@ router.get('/', (req, res) => {
             "img_url"
         FROM
             "event"
+        WHERE
+            "user_id" = $1
         ORDER BY
             "start_date" DESC,
             "id" DESC;
-    `).then(results => {
+    `, [
+        req.user.id
+    ]).then(results => {
             res.send(results.rows);
         }).catch(error => {
             console.log('Error getting event list :', error);
