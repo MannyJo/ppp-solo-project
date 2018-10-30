@@ -30,7 +30,7 @@ class EventList extends Component {
     render() {
         const classes = this.props.classes;
         return (
-            <TableRow>
+            <TableRow hover>
                 <TableCell numeric>{this.props.event.number}</TableCell>
                 <TableCell onClick={this.sendToDetail} className={classes.title}>
                     {this.props.event.title}

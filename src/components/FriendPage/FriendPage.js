@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
 import FriendPageForm from '../FriendPageForm/FriendPageForm';
 import FriendPageFormUpdate from '../FriendPageFormUpdate/FriendPageFormUpdate';
+import Edit from '@material-ui/icons/Edit';
 
 const styles = theme => ({
     frame: {
@@ -60,13 +61,13 @@ class GroupPage extends Component {
                             </TableHead>
                             <TableBody>
                                 {this.props.friendList.map(friend => 
-                                    <TableRow key={friend.id}>
+                                    <TableRow hover key={friend.id}>
                                         <TableCell className={classes.center}>{friend.group_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_email}</TableCell>
                                         <TableCell className={classes.center}>
                                             <Button onClick={this.handleUpdateFriend(friend)} color="primary">
-                                                Update
+                                                <Edit />
                                             </Button>
                                         </TableCell>
                                         <TableCell className={classes.center}>

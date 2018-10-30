@@ -1,0 +1,33 @@
+.loginLogo {
+    color: black;
+    font-size: 50px;
+    text-align: center;
+}
+
+.registerFrame {
+    background-color: #dbd5d5aa;
+    width: 404px;
+    height: 460px;
+    margin: 20px auto;
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.loginForm {
+    background-color: white;
+    padding: 25px;
+    border-radius: 2px;
+}
+
+.loginForm input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.loginButton {
+    margin: 10px 0 10px 0;
+}

@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
 import GroupPageFormUpdate from '../GroupPageFormUpdate/GroupPageFormUpdate';
+import Edit from '@material-ui/icons/Edit';
 
 const styles = theme => ({
     frame: {
@@ -99,11 +100,13 @@ class GroupPage extends Component {
                             </TableHead>
                             <TableBody>
                                 {this.props.groupList.map(group =>
-                                    <TableRow key={group.id}>
+                                    <TableRow hover key={group.id}>
                                         <TableCell className={classes.center}>{group.group_name}</TableCell>
                                         <TableCell className={classes.center}>{group.members}</TableCell>
                                         <TableCell className={classes.center}>
-                                            <Button color="primary" onClick={this.handleUpdateClick(group)}>Update</Button>
+                                            <Button color="primary" onClick={this.handleUpdateClick(group)}>
+                                                <Edit />
+                                            </Button>
                                         </TableCell>
                                         <TableCell className={classes.center}>
                                             <Button color="secondary" onClick={this.handleDeleteClick(group)}>
