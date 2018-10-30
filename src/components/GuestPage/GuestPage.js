@@ -169,7 +169,7 @@ class GuestPage extends Component {
                                     <div className={classes.title}>
                                         <strong>{detail.title}</strong>
                                     </div>
-                                    <div><img src={detail.img_url} className={classes.image} /></div>
+                                    <div><img src={detail.img_url} className={classes.image} alt={detail.title} /></div>
                                     <div className={classes.message}>{detail.message}</div>
                                     {
                                         detail.show_secret ?

@@ -180,7 +180,7 @@ class InvitationFormUpdate extends Component {
                             className={classes.input}
                         />
                         <div id="imagePreview">
-                            <img src={this.state.img_url} width="100%" alt="Add image" />
+                            <img src={this.state.img_url} width="100%" alt="Just Added" />
                         </div>
                         <label htmlFor="message">Message</label>
                         <input id="message" name="message" type="text"

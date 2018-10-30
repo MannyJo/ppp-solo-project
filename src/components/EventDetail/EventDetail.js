@@ -50,7 +50,7 @@ class EventDetail extends Component {
                 <div className={classes.displayFlex}>
                     <div className={classes.detailFrame}>
                         <div className={classes.title}><strong>{detail.title}</strong></div>
-                        <div><img src={detail.img_url} className={classes.image} /></div>
+                        <div><img src={detail.img_url} className={classes.image} alt={detail.title} /></div>
                         <div className={classes.message}>{detail.message}</div>
                         <div className={classes.secretMessage}>{detail.secret_message}</div>
                         <div className={classes.left}>
