@@ -16,7 +16,7 @@ const styles = theme => ({
         margin: '10px 0 20px 0',
     },
     message: {
-        fontSize: '30px',
+        fontSize: '20px',
         margin: '10px 0 5px 0',
     },
     secretMessage: {
@@ -41,6 +41,12 @@ const styles = theme => ({
         display: 'inline-block',
         width: '100px',
         textAlign: 'right',
+        margin: '5px 0 5px 0',
+    },
+    labelContent: {
+        display: 'inline-block',
+        width: '300px',
+        textAlign: 'left',
         margin: '5px 0 5px 0',
     },
     caption: {

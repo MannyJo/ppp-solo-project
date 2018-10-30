@@ -23,21 +23,18 @@ function* verifyGuest(action) {
     }
 }
 
-// function* invitaionDetail(action) {
-//     try{
-//         const id = action.payload.id;
-//         const email = encodeURIComponent(action.payload.email);
-//         const invitationResponse = yield call(axios.get, `/api/guest/invitation/${id}/${email}`, config);
-
-//         yield put({ type: 'GET_INVITATION', payload: invitationResponse.data });
-//     } catch(error) {
-//         console.log('Error guest\'s invitation :', error);
-//     }
-// }
+function* sendAttendCode(action) {
+    try {
+        yield call(axios.post, '/api/guest', action.payload, config);
+        yield put({ type: 'VERIFY_GUEST', payload: { email: action.payload.email, id: action.payload.eventId } });
+    } catch(error) {
+        console.log('Error sending attend code :', error);
+    }
+}
 
 function* guestSaga() {
     yield takeLatest('VERIFY_GUEST', verifyGuest);
-    // yield takeLatest('INVITATION_DETAIL', invitaionDetail);
+    yield takeLatest('SEND_ATTEND_CD', sendAttendCode);
 }
 
 export default guestSaga;

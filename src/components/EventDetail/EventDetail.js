@@ -53,8 +53,18 @@ class EventDetail extends Component {
                         <div><img src={detail.img_url} className={classes.image} /></div>
                         <div className={classes.message}>{detail.message}</div>
                         <div className={classes.secretMessage}>{detail.secret_message}</div>
-                        <div className={classes.left}><div className={classes.label}>Date : </div> {detail.end_date}</div>
-                        <div className={classes.left}><div className={classes.label}>Address : </div> {detail.address}</div>
+                        <div className={classes.left}>
+                            <div className={classes.label}>Date : </div>
+                            <div className={classes.labelContent}>
+                                {detail.end_date}
+                            </div>
+                        </div>
+                        <div className={classes.left}>
+                            <div className={classes.label}>Address : </div>
+                            <div className={classes.labelContent}>
+                                {detail.address}
+                            </div>
+                        </div>
                         {detail.lat && detail.lng && detail.address &&
                             <div style={{ width: '500px', height: '400px' }}>
                                 <Map

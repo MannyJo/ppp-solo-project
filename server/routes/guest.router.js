@@ -18,7 +18,9 @@ router.get('/:id/:email', (req, res) => {
             "ev"."lng",
             "ev"."lat",
             "ev"."img_url",
-            "ef"."show_secret"
+            "ef"."show_secret",
+            "ef"."attend_cd",
+            "fr"."id" AS "friend_id"
         FROM
             "event" AS "ev"
             LEFT JOIN "event_friend" AS "ef"
@@ -40,7 +42,28 @@ router.get('/:id/:email', (req, res) => {
         console.log(results.rows);
         res.send(response);
     }).catch(error => {
-        console.log('Error verifying guest user');
+        console.log('Error verifying guest user :', error);
+        res.sendStatus(500);
+    });
+});
+
+router.post('/', (req, res) => {
+    console.log('in /api/guest POST');
+    console.log(req.body);
+
+    pool.query(`
+        UPDATE "event_friend"
+        SET "attend_cd" = $1
+        WHERE "event_id" = $2
+            AND "friend_id" = $3 ;
+    `, [
+        req.body.attendCd,
+        req.body.eventId,
+        req.body.friendId
+    ]).then(() => {
+        res.sendStatus(200);
+    }).catch(error => {
+        console.log('Error updating attend status :', error);
         res.sendStatus(500);
     });
 });
