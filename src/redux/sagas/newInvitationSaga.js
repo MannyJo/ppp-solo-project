@@ -5,7 +5,12 @@ function* makeNewInvitation(action) {
     try{
         const imgNameResponse = yield call(axios.post, '/api/event/fileupload', action.payload.imageFile);
 
-        yield call(axios.post, '/api/event', {...action.payload.form, fileName: imgNameResponse.data.fileName});
+        const eventResponse = yield call(axios.post, '/api/event', {...action.payload.form, fileName: imgNameResponse.data.fileName});
+        console.log(eventResponse.data.eventId);
+        yield call(axios.post, '/api/email/send', { 
+            eventUrl: window.location.host + '/#/guest/' + eventResponse.data.eventId, 
+            friendList: action.payload.form.selectedFriends 
+        });
 
         yield put({ type: 'EVENT_LIST' });
     } catch(error) {

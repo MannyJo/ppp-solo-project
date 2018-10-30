@@ -105,7 +105,7 @@ router.post('/', (req, res) => {
 
         pool.query(insertEventFriend + chunks.join(', ') + ';', params)
             .then(() => {
-                res.sendStatus(201);
+                res.send({ eventId: eventId });
             }).catch(error => {
                 console.log('Error inserting new invitation data :', error);
                 pool.query('DELETE FROM "event" WHERE "id" = $1;', [eventId]);

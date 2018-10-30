@@ -15,6 +15,7 @@ const groupRouter = require('./routes/group.router');
 const friendRouter = require('./routes/friend.router');
 const eventDetail = require('./routes/detail.router');
 const guestRouter = require('./routes/guest.router');
+const emailRouter = require('./routes/email.router');
 
 // Body parser middleware
 app.use(fileUpload());
@@ -35,6 +36,7 @@ app.use('/api/group', groupRouter);
 app.use('/api/friend', friendRouter);
 app.use('/api/detail', eventDetail);
 app.use('/api/guest', guestRouter);
+app.use('/api/email', emailRouter);
 
 // Serve static files
 app.use(express.static('build'));
