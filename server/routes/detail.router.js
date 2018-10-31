@@ -70,9 +70,11 @@ router.put('/update', (req, res) => {
             "message" = $3,
             "secret_message" = $4,
             "address" = $5,
-            "img_url" = $6
+            "img_url" = $6,
+            "lat" = $7,
+            "lng" = $8
         WHERE
-            "id" = $7 ;
+            "id" = $9 ;
     `;
 
     let deleteEventFriend = `
@@ -99,10 +101,13 @@ router.put('/update', (req, res) => {
             req.body.secretMessage, 
             req.body.location, 
             req.body.fileName?req.protocol+'://'+req.get('host')+'/api/event/image/'+req.body.fileName:req.body.img_url,
+            req.body.lat,
+            req.body.lng,
             req.body.id, 
         ]), 
         pool.query(deleteEventFriend, [ req.body.id ])
     ]).then(() => {
+        console.log(req.body.selectedFriends)
         const insertFriends = req.body.selectedFriends.map(friend => (
             pool.query(insertEventFriend, [
                 req.body.id, 
@@ -111,6 +116,7 @@ router.put('/update', (req, res) => {
                 friend.attend_cd
             ])
         ));
+        console.log(insertFriends)
         Promise.all(insertFriends)
             .then(() => {
                 res.sendStatus(200);

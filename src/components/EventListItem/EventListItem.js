@@ -13,6 +13,10 @@ const styles = theme => ({
     }, 
     title: {
         width: '40%'
+    },
+    iconColumn: {
+        textAlign: 'center',
+        width: '150px',
     }
 });
 
@@ -31,12 +35,12 @@ class EventList extends Component {
         const classes = this.props.classes;
         return (
             <TableRow hover>
-                <TableCell numeric>{this.props.event.number}</TableCell>
+                <TableCell onClick={this.sendToDetail} numeric>{this.props.event.number}</TableCell>
                 <TableCell onClick={this.sendToDetail} className={classes.title}>
                     {this.props.event.title}
                 </TableCell>
-                <TableCell className={classes.center}>{this.props.event.end_date}</TableCell>
-                <TableCell className={classes.center}>
+                <TableCell onClick={this.sendToDetail} className={classes.center}>{this.props.event.end_date}</TableCell>
+                <TableCell className={classes.iconColumn}>
                     <Button color="secondary" onClick={this.handleDeleteClick(this.props.event.id)}>
                         <Delete />
                     </Button>

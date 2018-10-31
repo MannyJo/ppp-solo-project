@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import styles from './InvitationFormStyles';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
+import Send from '@material-ui/icons/Send';
 
 const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
 let markers = [];
@@ -226,8 +227,6 @@ class InvitationForm extends Component {
     handleSubmitClick = event => {
         event.preventDefault();
 
-        console.log(this.state);
-
         if (this.state.selectedFriends.length === 0) {
             alert('You should select at least one friend');
         } else {
@@ -374,7 +373,7 @@ class InvitationForm extends Component {
                             type="submit"
                             className={classes.bottomButton}
                         >
-                            Send
+                            <Send />&nbsp;Send
                         </Button>
                     </div>
                 </form>

@@ -12,6 +12,7 @@ const styles = theme => ({
     form: {
         textAlign: 'left',
         marginBottom: '10px',
+        width: '300px',
     },
     input: {
         width: '100%',
@@ -23,12 +24,13 @@ const styles = theme => ({
         borderRadius: '5px',
     },
     select: {
-        width: '140px',
+        margin: '8px 0',
+        width: '100%',
         height: '35px',
     },
 });
 
-class FriendPageForm extends Component {
+class FriendPagePopupForm extends Component {
     state = {
         id: '',
         friendName: '',
@@ -44,7 +46,15 @@ class FriendPageForm extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.props.dispatch({ type: 'UPDATE_FRIEND', payload: this.state });
+        if (this.props.update) {
+            this.props.dispatch({ type: 'UPDATE_FRIEND', payload: this.state });
+        } else {
+            if (this.state.groupId === '' || this.state.groupId === null || this.state.groupId === 0) {
+                alert('Group has to be selected');
+            } else {
+                this.props.dispatch({ type: 'ADD_FRIEND', payload: this.state });
+            }
+        }
         this.handleClose();
     }
 
@@ -54,12 +64,14 @@ class FriendPageForm extends Component {
 
     componentDidMount = () => {
         this.props.dispatch({ type: 'GROUP_LIST' });
-        this.setState({
-            id: this.props.friendInfo.id,
-            friendName: this.props.friendInfo.friend_name,
-            friendEmail: this.props.friendInfo.friend_email,
-            groupId: this.props.friendInfo.group_id,
-        });
+        if (this.props.update) {
+            this.setState({
+                id: this.props.friendInfo.id,
+                friendName: this.props.friendInfo.friend_name,
+                friendEmail: this.props.friendInfo.friend_email,
+                groupId: this.props.friendInfo.group_id,
+            });
+        }
     }
 
     render() {
@@ -72,7 +84,7 @@ class FriendPageForm extends Component {
             >
                 <form onSubmit={this.handleSubmit} className={classes.form}>
                     <DialogContent>
-                        <label htmlFor="friendInput">Friend : </label>
+                        <label htmlFor="friendInput">Friend</label>
                         <input
                             type="text"
                             id="friendInput"
@@ -82,7 +94,7 @@ class FriendPageForm extends Component {
                             className={classes.input}
                             required
                         />
-                        <label htmlFor="emailInput">E-Mail : </label>
+                        <label htmlFor="emailInput">E-Mail</label>
                         <input
                             type="email"
                             id="emailInput"
@@ -92,7 +104,7 @@ class FriendPageForm extends Component {
                             className={classes.input}
                             required
                         />
-                        <label htmlFor="groupList">Group : </label>
+                        <label htmlFor="groupList">Group</label>
                         <select
                             id="groupList"
                             name="groupList"
@@ -112,7 +124,7 @@ class FriendPageForm extends Component {
                             Cancel
                         </Button>
                         <Button color="primary" type="submit">
-                            Update
+                            {this.props.update ? 'Update' : 'Add'}
                         </Button>
                     </DialogActions>
                 </form>
@@ -127,4 +139,4 @@ const mapStateToProps = state => ({
     dialogOpen: state.dialogOpen,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(FriendPageForm));
+export default connect(mapStateToProps)(withStyles(styles)(FriendPagePopupForm));

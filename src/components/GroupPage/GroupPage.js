@@ -9,34 +9,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
-import GroupPageFormUpdate from '../GroupPageFormUpdate/GroupPageFormUpdate';
+import GroupPagePopupForm from '../GroupPagePopupForm/GroupPagePopupForm';
 import Edit from '@material-ui/icons/Edit';
-
-const styles = theme => ({
-    frame: {
-        width: '800px',
-        margin: 'auto',
-    },
-    form: {
-        textAlign: 'center',
-    },
-    input: {
-        padding: '12px 20px',
-        margin: '8px 0',
-        display: 'inline-block',
-        border: '1px solid #ccc',
-        boxSizing: 'border-box',
-        borderRadius: '5px',
-    },
-    center: {
-        textAlign: 'center',
-    }
-});
+import Search from '@material-ui/icons/Search';
+import Toolbar from '@material-ui/core/Toolbar';
+import InputBase from '@material-ui/core/InputBase';
+import styles from './GroupPageStyles';
+import AddIcon from '@material-ui/icons/Add';
 
 class GroupPage extends Component {
     state = {
-        newGroupName: '',
         updateGroup: '',
+        update: false,
+        searchWord: '',
     }
 
     handleChangeFor = property => event => {
@@ -54,14 +39,19 @@ class GroupPage extends Component {
     }
 
     handleUpdateClick = group => () => {
-        this.setState({ updateGroup: group });
+        this.setState({ updateGroup: group, update: true });
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
-    handleSubmit = event => {
+    handleAddClick = () => {
+        this.setState({ update: false });
+        this.props.dispatch({ type: 'OPEN_DIALOG' });
+    }
+
+    searchGroup = event => {
         event.preventDefault();
-        this.props.dispatch({ type: 'ADD_GROUP', payload: this.state });
-        this.setState({ newGroupName: '' });
+        this.props.dispatch({ type: 'GROUP_LIST_BY_KEYWORD', payload: this.state.searchWord })
+        this.setState({ searchWord: '' });
     }
 
     componentDidMount = () => {
@@ -72,30 +62,35 @@ class GroupPage extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <h2>Groups</h2>
                 <div className={classes.frame}>
-                    <form onSubmit={this.handleSubmit} className={classes.form}>
-                        <label htmlFor="groupInput">Group : </label>
-                        <input 
-                            type="text" 
-                            value={this.state.newGroupName} 
-                            placeholder="Group Name"
-                            onChange={this.handleChangeFor('newGroupName')} 
-                            className={classes.input}
-                            required
-                        />&nbsp;
-                        <Button variant="outlined" color="primary" type="submit">
-                            Add Group
-                        </Button>
-                    </form>
                     <Paper>
+                        <Toolbar className={classes.toolbar}>
+                            <h2 className={classes.title}>Groups</h2>
+                            <Button variant="extendedFab" className={classes.button} onClick={this.handleAddClick}>
+                                <AddIcon />
+                            </Button>
+                            <div className={classes.grow} />
+                            <form onSubmit={this.searchGroup} className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <Search />
+                                </div>
+                                <InputBase
+                                    placeholder="Search…"
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    value={this.state.searchWord}
+                                    onChange={this.handleChangeFor('searchWord')}
+                                />
+                            </form>
+                        </Toolbar>
                         <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell className={classes.center}>Name</TableCell>
                                     <TableCell className={classes.center}># of Members</TableCell>
-                                    <TableCell className={classes.center}>Update</TableCell>
-                                    <TableCell className={classes.center}>Delete</TableCell>
+                                    <TableCell className={classes.center}></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -103,12 +98,10 @@ class GroupPage extends Component {
                                     <TableRow hover key={group.id}>
                                         <TableCell className={classes.center}>{group.group_name}</TableCell>
                                         <TableCell className={classes.center}>{group.members}</TableCell>
-                                        <TableCell className={classes.center}>
+                                        <TableCell className={classes.iconColumn}>
                                             <Button color="primary" onClick={this.handleUpdateClick(group)}>
                                                 <Edit />
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell className={classes.center}>
+                                            </Button>&nbsp;/&nbsp;
                                             <Button color="secondary" onClick={this.handleDeleteClick(group)}>
                                                 <Delete />
                                             </Button>
@@ -119,7 +112,7 @@ class GroupPage extends Component {
                         </Table>
                     </Paper>
                 </div>
-                {this.props.dialogOpen?<GroupPageFormUpdate group={this.state.updateGroup} />:null}
+                {this.props.dialogOpen?<GroupPagePopupForm group={this.state.updateGroup} update={this.state.update} />:null}
             </div>
         );
     }

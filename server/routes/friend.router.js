@@ -87,4 +87,42 @@ router.put('/update', (req, res) => {
     });
 });
 
+router.get('/:groupId/:keyword', (req, res) => {
+    console.log('in /api/friend/groupId/keyword');
+
+    console.log(req.params);
+
+    let keyword = req.params.keyword==='nokeyword'?'':req.params.keyword;
+
+    let searchFriendByKeyword = `
+        SELECT
+            "fr"."id",
+            "fr"."friend_name",
+            "fr"."friend_email",
+            "fr"."group_id",
+            "gr"."group_name"
+        FROM
+            "friend" AS "fr"
+            LEFT JOIN "group" AS "gr"
+                On "fr"."group_id" = "gr"."id"
+        WHERE
+            "fr"."user_id" = $1
+            AND ($2 = 0 or "gr"."id" = $2)
+            AND "fr"."friend_name" ILIKE '%' || $3 || '%'
+        ORDER BY
+            "fr"."friend_name" ASC ;
+    `;
+
+    pool.query(searchFriendByKeyword, [
+        req.user.id,
+        req.params.groupId,
+        keyword
+    ]).then(results => {
+        res.send(results.rows);
+    }).catch(error => {
+        console.log('Error getting friends by keyword :', error);
+        res.sendStatus(500);
+    });
+});
+
 module.exports = router;

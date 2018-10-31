@@ -24,7 +24,7 @@ const styles = theme => ({
     },
 });
 
-class GroupPageFormUpdate extends Component {
+class GroupPagePopupForm extends Component {
     state = {
         groupId: 0,
         groupName: '',
@@ -42,15 +42,21 @@ class GroupPageFormUpdate extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.props.dispatch({ type: 'UPDATE_GROUP', payload: this.state });
+        if(this.props.update){
+            this.props.dispatch({ type: 'UPDATE_GROUP', payload: this.state });
+        } else {
+            this.props.dispatch({ type: 'ADD_GROUP', payload: this.state });
+        }
         this.handleClose();
     }
 
     componentDidMount = () => {
-        this.setState({
-            groupId: this.props.group.id,
-            groupName: this.props.group.group_name,
-        });
+        if(this.props.update){
+            this.setState({
+                groupId: this.props.group.id,
+                groupName: this.props.group.group_name,
+            });
+        }
     }
 
     render() {
@@ -63,7 +69,7 @@ class GroupPageFormUpdate extends Component {
             >
                 <form onSubmit={this.handleSubmit} className={classes.form}>
                     <DialogContent>
-                        <label htmlFor="groupInput">Group : </label>
+                        <label htmlFor="groupInput">Group</label>
                         <input
                             type="text"
                             value={this.state.groupName}
@@ -77,7 +83,7 @@ class GroupPageFormUpdate extends Component {
                             Cancel
                         </Button>
                         <Button color="primary" type="submit">
-                            Update
+                            {this.props.update?'Update':'Add'}
                         </Button>
                     </DialogActions>
                 </form>
@@ -90,4 +96,4 @@ const mapStateToProps = state => ({
     dialogOpen: state.dialogOpen,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(GroupPageFormUpdate));
+export default connect(mapStateToProps)(withStyles(styles)(GroupPagePopupForm));

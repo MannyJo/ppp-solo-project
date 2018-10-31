@@ -11,6 +11,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
+import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
+
+const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
+let markers = [];
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -48,6 +52,11 @@ class InvitationFormUpdate extends Component {
         endDate: '',
         location: '',
         img_url: '',
+        lat: '',
+        lng: '',
+        showingInfoWindow: false,
+        activeMarker: {},
+        selectedPlace: {},
         selectedFriends: [],
     }
 
@@ -83,7 +92,7 @@ class InvitationFormUpdate extends Component {
         let friendId = document.getElementById('friendList').value;
 
         const selectedFriend = this.props.friendListByGroupId.map(friend => {
-            return { ...friend, checked: false };
+            return { ...friend, show_secret: false, attend_cd: null };
         }).filter(friend => {
             let count = 0; // counter to check the same id is in the table
             this.state.selectedFriends.forEach(addedFriend => {
@@ -129,6 +138,113 @@ class InvitationFormUpdate extends Component {
         ImgReader.readAsDataURL(img[0]);
     }
 
+    initAutocomplete = (mapProps, map) => {
+        let { google } = mapProps;
+
+        // Create the search box and link it to the UI element.
+        let input = document.getElementById('location');
+        let searchBox = new google.maps.places.SearchBox(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', () => {
+            let places = searchBox.getPlaces();
+
+            if (places.length === 0) {
+                return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function (marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // For each place, get the icon, name and location.
+            let bounds = new google.maps.LatLngBounds();
+
+            // only need one place!!!
+            // places.forEach(function (place) {
+                let place = places[0];
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+
+                this.setState({
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng(),
+                    location: place.formatted_address,
+                });
+
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            // });
+            map.fitBounds(bounds);
+        });
+    }
+
+    onMapClicked = (mapProps, map, clickEvent) => {
+
+        let { google } = mapProps;
+        let geocoder = new google.maps.Geocoder();
+        let address = '';
+
+        let latLng = { 
+            lat: clickEvent.latLng.lat(), 
+            lng: clickEvent.latLng.lng() 
+        };
+
+        markers.forEach((marker) => {
+            marker.setMap(null);
+        });
+        markers = [];
+
+        markers.push(new google.maps.Marker({
+            map: map,
+            title: 'something',
+            name: 'my marker',
+            position: latLng
+        }));
+
+        geocoder.geocode({ location: latLng }, (results, status) => {
+            address = results[0].formatted_address;
+            document.getElementById('location').value = results[0].formatted_address;
+
+            this.setState({
+                lat: latLng.lat,
+                lng: latLng.lng,
+                location: address,
+            });
+
+            map.setCenter(latLng);
+        });
+    };
+
+    onMarkerClick = (props, marker, e) => {
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true
+        });
+    }
+
     handleSubmitClick = event => {
         event.preventDefault();
 
@@ -150,6 +266,8 @@ class InvitationFormUpdate extends Component {
             secretMessage: this.props.detail.secret_message,
             endDate: dateArr[2]+'-'+dateArr[0]+'-'+dateArr[1],
             location: this.props.detail.address,
+            lat: this.props.detail.lat,
+            lng: this.props.detail.lng,
             img_url: this.props.detail.img_url,
             selectedFriends: this.props.members,
         });
@@ -213,6 +331,40 @@ class InvitationFormUpdate extends Component {
                             onChange={this.handleChangeFor('location')}
                             className={classes.input}
                         />
+                        <div style={{ width: '535px', height: '400px' }}>
+                            <Map
+                                google={this.props.google}
+                                onReady={this.initAutocomplete}
+                                onClick={this.onMapClicked}
+                                initialCenter={{
+                                    lat: Number(this.state.lat),
+                                    lng: Number(this.state.lng)
+                                }}
+                                center={{
+                                    lat: Number(this.state.lat),
+                                    lng: Number(this.state.lng)
+                                }}
+                                containerStyle={{ width: '535px', height: '400px', borderRadius: '10px' }}
+                                style={{ width: '535px', height: '400px', borderRadius: '10px' }}
+                                zoom={14}
+                                visible={true}
+                            >
+                                <Marker
+                                    title={'This is the party place'}
+                                    name={this.state.title}
+                                    position={{ lat: Number(this.state.lat), lng: Number(this.state.lng) }}
+                                    onClick={this.onMarkerClick}
+                                />
+                                <InfoWindow
+                                    marker={this.state.activeMarker}
+                                    visible={this.state.showingInfoWindow}
+                                >
+                                    <div>
+                                        <h3>{this.state.selectedPlace.name}</h3>
+                                    </div>
+                                </InfoWindow>
+                            </Map>
+                        </div><br />
                         <label htmlFor="friendList">Friends : </label>
                         <select id="groupList" name="groupList"
                             onChange={this.handleGroupChange}
@@ -276,4 +428,6 @@ const mapStateToProps = state => ({
     dialogOpen: state.dialogOpen,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(InvitationFormUpdate));
+export default GoogleApiWrapper({
+    apiKey: API_KEY
+})(connect(mapStateToProps)(withStyles(styles)(InvitationFormUpdate)));

@@ -9,35 +9,60 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
-import FriendPageForm from '../FriendPageForm/FriendPageForm';
-import FriendPageFormUpdate from '../FriendPageFormUpdate/FriendPageFormUpdate';
+import FriendPagePopupForm from '../FriendPagePopupForm/FriendPagePopupForm';
 import Edit from '@material-ui/icons/Edit';
+import styles from './FriendPageStyles';
+import Toolbar from '@material-ui/core/Toolbar';
+import InputBase from '@material-ui/core/InputBase';
+import AddIcon from '@material-ui/icons/Add';
+import Search from '@material-ui/icons/Search';
 
-const styles = theme => ({
-    frame: {
-        minWidth: '800px',
-        maxWidth: '1000px',
-        overflowX: 'auto',
-        margin: 'auto',
-    },
-    center: {
-        textAlign: 'center',
-    },
-});
+class FriendPage extends Component {
+    state = {
+        update: false,
+        groupId: '',
+        searchWord: '',
+    }
 
-class GroupPage extends Component {
+    handleChangeFor = property => event => {
+        this.setState({
+            [property]: event.target.value,
+        });
+    }
+
     handleDeleteClick = friend => () => {
         if(window.confirm('Want to delete?')) {
             this.props.dispatch({ type: 'DELETE_FRIEND', payload: friend });
         }
     }
 
+    handleAddClick = () => {
+        this.setState({ update: false });
+        this.props.dispatch({ type: 'OPEN_DIALOG' });
+    }
+
     handleUpdateFriend = friend => event => {
+        this.setState({ update: true });
         this.props.dispatch({ type: 'UPDATE_FRIEND_INFO', payload: friend });
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
+    searchFriendByGroupId = event => {
+        // event.preventDefault();
+        console.log(event.target.value);
+        this.setState({ groupId: event.target.value });
+        this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: {...this.state, groupId: event.target.value} });
+    }
+
+    searchFriendByKeyword = event => {
+        event.preventDefault();
+        console.log(this.state);
+        this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: this.state });
+        this.setState({ searchWord: '' });
+    }
+
     componentDidMount = () => {
+        this.props.dispatch({ type: 'GROUP_LIST' });
         this.props.dispatch({ type: 'FRIEND_LIST' });
     }
 
@@ -45,18 +70,40 @@ class GroupPage extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <h2>Friends</h2>
                 <div className={classes.frame}>
-                    <FriendPageForm />
                     <Paper>
+                        <Toolbar className={classes.toolbar}>
+                            <h2 className={classes.title}>Friends</h2>
+                            <Button variant="extendedFab" className={classes.button} onClick={this.handleAddClick}>
+                                <AddIcon />
+                            </Button>
+                            <div className={classes.grow} />
+                            <select className={classes.searchSelect} onChange={this.searchFriendByGroupId}>
+                                <option value="">All Group</option>
+                                {this.props.groupList.map(group => <option key={group.id} value={group.id}>{group.group_name}</option>)}
+                            </select>
+                            <form onSubmit={this.searchFriendByKeyword} className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <Search />
+                                </div>
+                                <InputBase
+                                    placeholder="Search…"
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    value={this.state.searchWord}
+                                    onChange={this.handleChangeFor('searchWord')}
+                                />
+                            </form>
+                        </Toolbar>
                         <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell className={classes.center}>Group</TableCell>
                                     <TableCell className={classes.center}>Name</TableCell>
                                     <TableCell className={classes.center}>E-Mail</TableCell>
-                                    <TableCell className={classes.center}>Update</TableCell>
-                                    <TableCell className={classes.center}>Delete</TableCell>
+                                    <TableCell className={classes.center}></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -65,12 +112,10 @@ class GroupPage extends Component {
                                         <TableCell className={classes.center}>{friend.group_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_email}</TableCell>
-                                        <TableCell className={classes.center}>
+                                        <TableCell className={classes.iconColumn}>
                                             <Button onClick={this.handleUpdateFriend(friend)} color="primary">
                                                 <Edit />
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell className={classes.center}>
+                                            </Button>&nbsp;/&nbsp;
                                             <Button color="secondary" onClick={this.handleDeleteClick(friend)}>
                                                 <Delete />
                                             </Button>
@@ -81,7 +126,7 @@ class GroupPage extends Component {
                         </Table>
                     </Paper>
                 </div>
-                {this.props.dialogOpen?<FriendPageFormUpdate />:null}
+                {this.props.dialogOpen?<FriendPagePopupForm update={this.state.update} />:null}
             </div>
         );
     }
@@ -89,7 +134,8 @@ class GroupPage extends Component {
 
 const mapStateToProps = state => ({ 
     dialogOpen: state.dialogOpen,
+    groupList: state.groupList,
     friendList: state.friendList.friendList,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(GroupPage));
+export default connect(mapStateToProps)(withStyles(styles)(FriendPage));

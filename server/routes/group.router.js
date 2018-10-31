@@ -32,6 +32,39 @@ router.get('/', (req, res) => {
 });
 
 /**
+ * GET route template
+ */
+router.get('/:keyword', (req, res) => {
+    console.log('in /api/group GET');
+
+    pool.query(`
+        SELECT
+            "gr"."id",
+            "gr"."group_name",
+            COUNT("fr"."id") AS "members"
+        FROM
+            "group" AS "gr"
+            LEFT JOIN "friend" AS "fr"
+                ON "gr"."id" = "fr"."group_id"
+        WHERE
+            "gr"."user_id" = $1
+            AND "gr"."group_name" ILIKE '%'||$2||'%'
+        GROUP BY
+            "gr"."id"
+        ORDER BY
+            "gr"."id" ASC ;
+    `, [ 
+        req.user.id,
+        req.params.keyword
+    ]).then(results => {
+        res.send(results.rows);
+    }).catch(error => {
+        console.log('Error getting groups :', error);
+        res.sendStatus(500);
+    });
+});
+
+/**
  * POST route template
  */
 router.post('/', (req, res) => {
@@ -41,7 +74,7 @@ router.post('/', (req, res) => {
         INSERT INTO "group" ( "group_name", "user_id" )
         VALUES ( $1, $2 );
     `, [ 
-        req.body.newGroupName,
+        req.body.groupName,
         req.user.id
      ]).then(() => {
         res.sendStatus(201);

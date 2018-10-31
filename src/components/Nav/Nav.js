@@ -20,7 +20,7 @@ import TimeToLeave from '@material-ui/icons/TimeToLeave';
 
 const styles = theme => ({
   list: {
-    width: 250,
+    width: 300,
   },
   drawerHeader: {
     ...theme.mixins.toolbar,

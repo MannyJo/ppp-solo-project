@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
+const config = {
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true,
+};
+
 function* friendList() {
     try {
-        const config = {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-        };
-
         const response = yield axios.get('/api/friend', config);
 
         yield put({ type: 'GET_FRIEND_LIST', payload: response.data });
@@ -17,13 +17,20 @@ function* friendList() {
     }
 }
 
+function* friendListByKeyword(action) {
+    try {
+        const groupId = action.payload.groupId === ''?'0':action.payload.groupId;
+        const keyword = action.payload.searchWord === undefined || action.payload.searchWord === ''?'nokeyword':action.payload.searchWord;
+        const friendResponse = yield axios.get(`/api/friend/${groupId}/${keyword}`, config);
+
+        yield put({ type: 'GET_FRIEND_LIST', payload: friendResponse.data });
+    } catch (error) {
+        console.log('Friend add request failed', error);
+    }
+}
+
 function* addFriend(action) {
     try {
-        const config = {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-        };
-
         yield axios.post('/api/friend', action.payload, config);
 
         yield put({ type: 'FRIEND_LIST' });
@@ -34,10 +41,6 @@ function* addFriend(action) {
 
 function* deleteFriend(action) {
     try {
-        const config = {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-        };
         const id = action.payload.id;
 
         yield axios.delete(`/api/friend/${id}`, config);
@@ -50,11 +53,6 @@ function* deleteFriend(action) {
 
 function* updateFriend(action) {
     try {
-        const config = {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-        };
-
         yield axios.put(`/api/friend/update`, action.payload, config);
 
         yield put({ type: 'FRIEND_LIST' });
@@ -65,6 +63,7 @@ function* updateFriend(action) {
 
 function* friendSaga() {
     yield takeLatest('FRIEND_LIST', friendList);
+    yield takeLatest('FRIEND_LIST_BY_KEYWORD', friendListByKeyword);
     yield takeLatest('ADD_FRIEND', addFriend);
     yield takeLatest('DELETE_FRIEND', deleteFriend);
     yield takeLatest('UPDATE_FRIEND', updateFriend);
