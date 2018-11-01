@@ -38,7 +38,11 @@ class FriendPageForm extends Component {
     handleSubmit = event => {
         event.preventDefault();
         if(this.state.groupId === '' || this.state.groupId === null){
-            alert('Group has to be selected');
+            swal(
+                'Select Group',
+                'One group has to be selected.',
+                'warning'
+            );
         } else {
             this.props.dispatch({ type: 'ADD_FRIEND', payload: this.state });
             this.setState({ friendName: '', friendEmail: '', groupId: '' });

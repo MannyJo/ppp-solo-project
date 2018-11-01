@@ -226,7 +226,7 @@ class InvitationForm extends Component {
 
         if (this.state.selectedFriends.length === 0) {
             swal(
-                'No Friends',
+                'Falied!?',
                 'You should select at least one friend.',
                 'warning'
             );
@@ -235,6 +235,17 @@ class InvitationForm extends Component {
             imageFile.append('file', this.uploadInput.files[0]);
 
             this.props.dispatch({ type: 'MAKE_NEW_INVITATION', payload: { imageFile: imageFile, form: this.state } });
+
+            swal({
+                title: 'Added!',
+                text: 'New invitation has been sent to your friends.',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: false,
+            });
+
             this.props.history.push('/main');
         }
     }

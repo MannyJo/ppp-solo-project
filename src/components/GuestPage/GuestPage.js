@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
 import styles from './GuestPageStyles';
+import swal from 'sweetalert2';
 
 const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
 const id = Number(window.location.hash.split('/').pop());
@@ -27,7 +28,7 @@ class GuestPage extends Component {
     }
 
     changeUser = () => {
-        this.setState({ email: 'ihavenothing@but.money' });
+        this.setState({ email: 'mansangjo2018@gmail.com' });
     }
 
     onMarkerClick = (props, marker, e) => {
@@ -47,6 +48,16 @@ class GuestPage extends Component {
                 friendId: this.props.invitation.friend_id,
                 attendCd: attendCd
             } 
+        });
+
+        swal({
+            title: 'Updated!',
+            text: 'Your reply has been updated.',
+            type: 'success',
+            timer: 1000,
+            showCloseButton: false,
+            showConfirmButton: false,
+            showCancelButton: false,
         });
     }
 

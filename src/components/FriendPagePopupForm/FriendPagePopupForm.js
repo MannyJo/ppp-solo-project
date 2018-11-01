@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import swal from 'sweetalert2';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -48,11 +49,33 @@ class FriendPagePopupForm extends Component {
         event.preventDefault();
         if (this.props.update) {
             this.props.dispatch({ type: 'UPDATE_FRIEND', payload: this.state });
+            swal({
+                title: 'Updated!',
+                text: 'Your friend info has been updated.',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: false,
+            });
         } else {
             if (this.state.groupId === '' || this.state.groupId === null || this.state.groupId === 0) {
-                alert('Group has to be selected');
+                swal(
+                    'Failed!',
+                    'Group has to be selected.',
+                    'warning'
+                );
             } else {
                 this.props.dispatch({ type: 'ADD_FRIEND', payload: this.state });
+                swal({
+                    title: 'Added!',
+                    text: 'Your friend info has been added.',
+                    type: 'success',
+                    timer: 1000,
+                    showCloseButton: false,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                });
             }
         }
         this.handleClose();

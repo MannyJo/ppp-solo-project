@@ -250,6 +250,17 @@ class InvitationFormUpdate extends Component {
         imageFile.append('file', this.uploadInput.files[0]);
 
         this.props.dispatch({ type: 'UPDATE_DETAIL', payload: { ...this.state, imageFile: imageFile } });
+
+        swal({
+            title: 'Updated!',
+            text: 'Your invitation has been updated.',
+            type: 'success',
+            timer: 1000,
+            showCloseButton: false,
+            showConfirmButton: false,
+            showCancelButton: false,
+        });
+
         this.props.dispatch({ type: 'CLOSE_DIALOG' });
     }
 

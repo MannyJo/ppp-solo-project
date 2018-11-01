@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import swal from 'sweetalert2';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -42,16 +43,34 @@ class GroupPagePopupForm extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        if(this.props.update){
+        if (this.props.update) {
             this.props.dispatch({ type: 'UPDATE_GROUP', payload: this.state });
+            swal({
+                title: 'Updated!',
+                text: 'Your group info has been updated.',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: false,
+            });
         } else {
             this.props.dispatch({ type: 'ADD_GROUP', payload: this.state });
+            swal({
+                title: 'Added!',
+                text: 'New group info has been added.',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: false,
+            });
         }
         this.handleClose();
     }
 
     componentDidMount = () => {
-        if(this.props.update){
+        if (this.props.update) {
             this.setState({
                 groupId: this.props.group.id,
                 groupName: this.props.group.group_name,
@@ -76,6 +95,7 @@ class GroupPagePopupForm extends Component {
                             placeholder="Group Name"
                             onChange={this.handleChangeFor('groupName')}
                             className={classes.input}
+                            required
                         />
                     </DialogContent>
                     <DialogActions>
@@ -83,7 +103,7 @@ class GroupPagePopupForm extends Component {
                             Cancel
                         </Button>
                         <Button color="primary" type="submit">
-                            {this.props.update?'Update':'Add'}
+                            {this.props.update ? 'Update' : 'Add'}
                         </Button>
                     </DialogActions>
                 </form>
