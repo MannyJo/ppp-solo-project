@@ -12,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
+import swal from 'sweetalert2';
 
 const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
 let markers = [];
@@ -90,7 +91,6 @@ class InvitationFormUpdate extends Component {
         event.preventDefault();
 
         let friendId = document.getElementById('friendList').value;
-
         const selectedFriend = this.props.friendListByGroupId.map(friend => {
             return { ...friend, show_secret: false, attend_cd: null };
         }).filter(friend => {
@@ -124,8 +124,8 @@ class InvitationFormUpdate extends Component {
         ImgReader.onload = (Event) => {
             let newPreview = document.getElementById("imagePreview");
             let ImagePre = new Image();
-            
-            if(newPreview.hasChildNodes()){
+
+            if (newPreview.hasChildNodes()) {
                 newPreview.removeChild(newPreview.firstChild);
             }
 
@@ -169,46 +169,48 @@ class InvitationFormUpdate extends Component {
             let bounds = new google.maps.LatLngBounds();
 
             // only need one place!!!
-            // places.forEach(function (place) {
-                let place = places[0];
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
+            let place = places[0];
+            if (!place.geometry) {
+                swal(
+                    'Failed!?',
+                    'Returned place contains no geometry.',
+                    'error'
+                );
+                return;
+            }
 
-                // Create a marker for each place.
-                markers.push(new google.maps.Marker({
-                    map: map,
-                    title: place.name,
-                    position: place.geometry.location
-                }));
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+                map: map,
+                title: place.name,
+                position: place.geometry.location
+            }));
 
-                this.setState({
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng(),
-                    location: place.formatted_address,
-                });
+            this.setState({
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                location: place.formatted_address,
+            });
 
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            // });
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+
             map.fitBounds(bounds);
         });
     }
 
     onMapClicked = (mapProps, map, clickEvent) => {
-
         let { google } = mapProps;
         let geocoder = new google.maps.Geocoder();
         let address = '';
 
-        let latLng = { 
-            lat: clickEvent.latLng.lat(), 
-            lng: clickEvent.latLng.lng() 
+        let latLng = {
+            lat: clickEvent.latLng.lat(),
+            lng: clickEvent.latLng.lng()
         };
 
         markers.forEach((marker) => {
@@ -218,8 +220,8 @@ class InvitationFormUpdate extends Component {
 
         markers.push(new google.maps.Marker({
             map: map,
-            title: 'something',
-            name: 'my marker',
+            title: 'Party Place',
+            name: 'Party Place',
             position: latLng
         }));
 
@@ -227,11 +229,7 @@ class InvitationFormUpdate extends Component {
             address = results[0].formatted_address;
             document.getElementById('location').value = results[0].formatted_address;
 
-            this.setState({
-                lat: latLng.lat,
-                lng: latLng.lng,
-                location: address,
-            });
+            this.setState({ lat: latLng.lat, lng: latLng.lng, location: address });
 
             map.setCenter(latLng);
         });
@@ -251,10 +249,10 @@ class InvitationFormUpdate extends Component {
         let imageFile = new FormData();
         imageFile.append('file', this.uploadInput.files[0]);
 
-        this.props.dispatch({ type: 'UPDATE_DETAIL', payload: {...this.state, imageFile: imageFile} });
+        this.props.dispatch({ type: 'UPDATE_DETAIL', payload: { ...this.state, imageFile: imageFile } });
         this.props.dispatch({ type: 'CLOSE_DIALOG' });
     }
-    
+
     componentDidMount = () => {
         this.props.dispatch({ type: 'GROUP_LIST' });
         this.props.dispatch({ type: 'FRIEND_LIST' });
@@ -264,7 +262,7 @@ class InvitationFormUpdate extends Component {
             title: this.props.detail.title,
             message: this.props.detail.message,
             secretMessage: this.props.detail.secret_message,
-            endDate: dateArr[2]+'-'+dateArr[0]+'-'+dateArr[1],
+            endDate: dateArr[2] + '-' + dateArr[0] + '-' + dateArr[1],
             location: this.props.detail.address,
             lat: this.props.detail.lat,
             lng: this.props.detail.lng,

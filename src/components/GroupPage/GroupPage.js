@@ -16,6 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import styles from './GroupPageStyles';
 import AddIcon from '@material-ui/icons/Add';
+import swal from 'sweetalert2';
 
 class GroupPage extends Component {
     state = {
@@ -31,11 +32,32 @@ class GroupPage extends Component {
     }
 
     handleDeleteClick = group => () => {
-        if (group.members > 0) {
-            alert('Can remove this group because of the members');
-        } else if (window.confirm('Want to delete?')) {
-            this.props.dispatch({ type: 'DELETE_GROUP', payload: group });
-        }
+        swal({
+            title: 'Are you sure?',
+            html: "<b style='color:hotpink'>" + group.group_name + "</b> will be deleted!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                if (group.members > 0) {
+                    swal(
+                        'Failed!?',
+                        'There are still members in this group.',
+                        'error'
+                    );
+                } else {
+                    this.props.dispatch({ type: 'DELETE_GROUP', payload: group });
+                    swal(
+                        'Deleted!',
+                        group.group_name + ' has been deleted.',
+                        'success'
+                    );
+                }
+            }
+        });
     }
 
     handleUpdateClick = group => () => {

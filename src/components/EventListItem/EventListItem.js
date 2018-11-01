@@ -6,11 +6,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
+import swal from 'sweetalert2';
 
 const styles = theme => ({
     center: {
         textAlign: 'center',
-    }, 
+    },
     title: {
         width: '40%'
     },
@@ -21,10 +22,25 @@ const styles = theme => ({
 });
 
 class EventList extends Component {
-    handleDeleteClick = eventId => () => {
-        if(window.confirm('Do you want to delete this invitation?')){
-            this.props.dispatch({ type: 'DELETE_EVENT', payload: eventId });
-        }
+    handleDeleteClick = deleteEvent => () => {
+        swal({
+            title: 'Are you sure?',
+            html: "<b style='color:hotpink'>" + deleteEvent.title + "</b> will be deleted!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                this.props.dispatch({ type: 'DELETE_EVENT', payload: deleteEvent.id });
+                swal(
+                    'Deleted!',
+                    deleteEvent.title + ' has been deleted.',
+                    'success'
+                );
+            }
+        });
     }
 
     sendToDetail = () => {
@@ -41,7 +57,7 @@ class EventList extends Component {
                 </TableCell>
                 <TableCell onClick={this.sendToDetail} className={classes.center}>{this.props.event.end_date}</TableCell>
                 <TableCell className={classes.iconColumn}>
-                    <Button color="secondary" onClick={this.handleDeleteClick(this.props.event.id)}>
+                    <Button color="secondary" onClick={this.handleDeleteClick(this.props.event)}>
                         <Delete />
                     </Button>
                 </TableCell>

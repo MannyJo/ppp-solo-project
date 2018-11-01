@@ -16,6 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import AddIcon from '@material-ui/icons/Add';
 import Search from '@material-ui/icons/Search';
+import swal from 'sweetalert2';
 
 class FriendPage extends Component {
     state = {
@@ -31,9 +32,24 @@ class FriendPage extends Component {
     }
 
     handleDeleteClick = friend => () => {
-        if(window.confirm('Want to delete?')) {
-            this.props.dispatch({ type: 'DELETE_FRIEND', payload: friend });
-        }
+        swal({
+            title: 'Are you sure?',
+            html: "<b style='color:hotpink'>" + friend.friend_name + "</b> will be deleted!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                this.props.dispatch({ type: 'DELETE_FRIEND', payload: friend });
+                swal(
+                    'Deleted!',
+                    friend.friend_name + ' has been deleted.',
+                    'success'
+                );
+            }
+        });
     }
 
     handleAddClick = () => {
@@ -48,15 +64,12 @@ class FriendPage extends Component {
     }
 
     searchFriendByGroupId = event => {
-        // event.preventDefault();
-        console.log(event.target.value);
         this.setState({ groupId: event.target.value });
-        this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: {...this.state, groupId: event.target.value} });
+        this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: { ...this.state, groupId: event.target.value } });
     }
 
     searchFriendByKeyword = event => {
         event.preventDefault();
-        console.log(this.state);
         this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: this.state });
         this.setState({ searchWord: '' });
     }
@@ -107,7 +120,7 @@ class FriendPage extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.props.friendList.map(friend => 
+                                {this.props.friendList.map(friend =>
                                     <TableRow hover key={friend.id}>
                                         <TableCell className={classes.center}>{friend.group_name}</TableCell>
                                         <TableCell className={classes.center}>{friend.friend_name}</TableCell>
@@ -120,19 +133,19 @@ class FriendPage extends Component {
                                                 <Delete />
                                             </Button>
                                         </TableCell>
-                                    </TableRow>    
+                                    </TableRow>
                                 )}
                             </TableBody>
                         </Table>
                     </Paper>
                 </div>
-                {this.props.dialogOpen?<FriendPagePopupForm update={this.state.update} />:null}
+                {this.props.dialogOpen ? <FriendPagePopupForm update={this.state.update} /> : null}
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({ 
+const mapStateToProps = state => ({
     dialogOpen: state.dialogOpen,
     groupList: state.groupList,
     friendList: state.friendList.friendList,

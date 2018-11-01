@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import styles from './InvitationFormStyles';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 import Send from '@material-ui/icons/Send';
+import swal from 'sweetalert2';
 
 const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
 let markers = [];
@@ -35,7 +36,6 @@ class InvitationForm extends Component {
         event.preventDefault();
 
         let friendId = document.getElementById('friendList').value;
-
         const selectedFriend = this.props.friendListByGroupId.map(friend => {
             return { ...friend, checked: false };
         }).filter(friend => {
@@ -100,8 +100,8 @@ class InvitationForm extends Component {
         ImgReader.onload = (Event) => {
             let newPreview = document.getElementById("imagePreview");
             let ImagePre = new Image();
-            
-            if(newPreview.hasChildNodes()){
+
+            if (newPreview.hasChildNodes()) {
                 newPreview.removeChild(newPreview.firstChild);
             }
 
@@ -145,46 +145,47 @@ class InvitationForm extends Component {
             let bounds = new google.maps.LatLngBounds();
 
             // only need one place!!!
-            // places.forEach(function (place) {
-                let place = places[0];
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
+            let place = places[0];
+            if (!place.geometry) {
+                swal(
+                    'Failed!?',
+                    'Returned place contains no geometry.',
+                    'error'
+                );
+                return;
+            }
 
-                // Create a marker for each place.
-                markers.push(new google.maps.Marker({
-                    map: map,
-                    title: place.name,
-                    position: place.geometry.location
-                }));
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+                map: map,
+                title: place.name,
+                position: place.geometry.location
+            }));
 
-                this.setState({
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng(),
-                    location: place.formatted_address,
-                });
+            this.setState({
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                location: place.formatted_address,
+            });
 
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            // });
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+
             map.fitBounds(bounds);
         });
     }
 
     onMapClicked = (mapProps, map, clickEvent) => {
-
         let { google } = mapProps;
         let geocoder = new google.maps.Geocoder();
         let address = '';
-
-        let latLng = { 
-            lat: clickEvent.latLng.lat(), 
-            lng: clickEvent.latLng.lng() 
+        let latLng = {
+            lat: clickEvent.latLng.lat(),
+            lng: clickEvent.latLng.lng()
         };
 
         markers.forEach((marker) => {
@@ -194,8 +195,8 @@ class InvitationForm extends Component {
 
         markers.push(new google.maps.Marker({
             map: map,
-            title: 'something',
-            name: 'my marker',
+            title: 'Party Place',
+            name: 'Party Place',
             position: latLng
         }));
 
@@ -203,18 +204,14 @@ class InvitationForm extends Component {
             address = results[0].formatted_address;
             document.getElementById('location').value = results[0].formatted_address;
 
-            this.setState({
-                lat: latLng.lat,
-                lng: latLng.lng,
-                location: address,
-            });
+            this.setState({ lat: latLng.lat, lng: latLng.lng, location: address });
 
             map.setCenter(latLng);
         });
     };
 
     preventEnter = event => {
-        if(event.key === 'Enter') {
+        if (event.key === 'Enter') {
             event.preventDefault();
         }
     }
@@ -228,7 +225,11 @@ class InvitationForm extends Component {
         event.preventDefault();
 
         if (this.state.selectedFriends.length === 0) {
-            alert('You should select at least one friend');
+            swal(
+                'No Friends',
+                'You should select at least one friend.',
+                'warning'
+            );
         } else {
             let imageFile = new FormData();
             imageFile.append('file', this.uploadInput.files[0]);

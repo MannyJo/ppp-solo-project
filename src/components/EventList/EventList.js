@@ -46,7 +46,6 @@ class EventList extends Component {
 
     searchEventByKeyword = event => {
         event.preventDefault();
-        console.log(this.state);
         this.props.dispatch({ type: 'EVENT_LIST_BY_KEYWORD', payload: this.state });
     }
 

@@ -38,7 +38,6 @@ class EventDetail extends Component {
     componentDidMount = () => {
         const id = window.location.hash.split('/').pop();
         this.props.dispatch({ type: 'EVENT_DETAIL', payload: id });
-        console.log(this.props.members);
     }
 
     render() {
