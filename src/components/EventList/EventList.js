@@ -29,7 +29,26 @@ class EventList extends Component {
         });
     }
 
-    
+    searchEventByClick = property => event => {
+        switch (property) {
+            case 'year':
+                this.setState({ year: event.target.value });
+                break;
+            case 'month':
+                this.setState({ month: event.target.value });
+                break;
+            default:
+                break;
+        }
+        
+        this.props.dispatch({ type: 'EVENT_LIST_BY_KEYWORD', payload: {...this.state, [property]: event.target.value }});
+    }
+
+    searchEventByKeyword = event => {
+        event.preventDefault();
+        console.log(this.state);
+        this.props.dispatch({ type: 'EVENT_LIST_BY_KEYWORD', payload: this.state });
+    }
 
     handleNewClick = () => {
         this.props.history.push('/new');
@@ -49,12 +68,12 @@ class EventList extends Component {
                         <AddIcon />
                     </Button>
                     <div className={classes.grow} />
-                    <select className={classes.searchSelect} onChange={this.handleChangeFor('year')}>
+                    <select className={classes.searchSelect} onChange={this.searchEventByClick('year')}>
                         <option value="">Year</option>
                         <option value="2019">2019</option>
                         <option value="2018">2018</option>
                     </select> &nbsp;
-                    <select className={classes.searchSelect} onChange={this.handleChangeFor('month')}>
+                    <select className={classes.searchSelect} onChange={this.searchEventByClick('month')}>
                         <option value="">Month</option>
                         <option value="1">Jan</option>
                         <option value="2">Feb</option>
@@ -69,7 +88,7 @@ class EventList extends Component {
                         <option value="11">Nov</option>
                         <option value="12">Dec</option>
                     </select>
-                    <form onSubmit={this.searchFriendByKeyword} className={classes.search}>
+                    <form onSubmit={this.searchEventByKeyword} className={classes.search}>
                         <div className={classes.searchIcon}>
                             <Search />
                         </div>
