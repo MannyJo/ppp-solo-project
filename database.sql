@@ -2,6 +2,7 @@ CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     user_name VARCHAR (80) NOT NULL,
     user_email VARCHAR (100) UNIQUE NOT NULL,
+    admin_cd CHAR(1) DEFAULT 1 NOT NULL, /* 0: admin, 1: user */
     password VARCHAR (1000) NOT NULL
 );
 

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { HashRouter as Router, Route, Redirect, Switch, } from 'react-router-dom';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
@@ -13,12 +13,13 @@ import GroupPage from '../GroupPage/GroupPage';
 import FriendPage from '../FriendPage/FriendPage';
 import EventDetail from '../EventDetail/EventDetail';
 import GuestPage from '../GuestPage/GuestPage';
+import Admin from '../Admin/Admin';
 
 import './App.css';
 
 class App extends Component {
-  componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'});
+  componentDidMount() {
+    this.props.dispatch({ type: 'FETCH_USER' });
   }
 
   render() {
@@ -64,13 +65,18 @@ class App extends Component {
               path="/detail"
               component={EventDetail}
             />
+            <ProtectedRoute
+              path="/admin"
+              component={Admin}
+            />
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
           </Switch>
           <Footer />
         </div>
       </Router>
-  )}
+    )
+  }
 }
 
 export default connect()(App);
