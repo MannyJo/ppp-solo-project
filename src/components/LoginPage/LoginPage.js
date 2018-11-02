@@ -43,7 +43,7 @@ class LoginPage extends Component {
         )}
         <div className="loginFrame">
           <form onSubmit={this.login} className="loginForm">
-            <h1 className="loginLogo">PPP</h1>
+            <h1 className="loginLogo">Log In</h1>
             <div>
               <label htmlFor="userEmail">
                 Email
