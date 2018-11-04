@@ -90,8 +90,6 @@ router.put('/update', (req, res) => {
 router.get('/:groupId/:keyword', (req, res) => {
     console.log('in /api/friend/groupId/keyword');
 
-    console.log(req.params);
-
     let keyword = req.params.keyword==='nokeyword'?'':req.params.keyword;
 
     let searchFriendByKeyword = `

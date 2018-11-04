@@ -4,7 +4,6 @@ const pool = require('../modules/pool');
 
 router.get('/:id/:email', (req, res) => {
     console.log('in /api/guest GET');
-    console.log(req.params.id, decodeURIComponent(req.params.email));
 
     pool.query(`
         SELECT
@@ -38,8 +37,7 @@ router.get('/:id/:email', (req, res) => {
             isVerified: results.rowCount>0?true:false,
             invitation: results.rows
         };
-        console.log(results.rowCount);
-        console.log(results.rows);
+        
         res.send(response);
     }).catch(error => {
         console.log('Error verifying guest user :', error);
@@ -49,7 +47,6 @@ router.get('/:id/:email', (req, res) => {
 
 router.post('/', (req, res) => {
     console.log('in /api/guest POST');
-    console.log(req.body);
 
     pool.query(`
         UPDATE "event_friend"

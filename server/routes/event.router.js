@@ -120,7 +120,6 @@ router.post('/', (req, res) => {
 
 router.post('/fileupload', (req, res) => {
     try {
-        console.log(req.files);
         if (req.files === null || req.files === {} || req.files === '' || req.files === undefined) {
             res.sendStatus(200);
         } else {

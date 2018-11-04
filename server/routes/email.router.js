@@ -34,8 +34,6 @@ router.post('/send', (req, res) => {
                 "redirect_uris": results.rows.filter(obj => obj.name === 'redirect_uris')[0].content.split(',')
             }
         };
-
-        console.log(req.body.friendList, req.body.eventUrl);
         
         authorize(content, sendEmail, req);
         res.sendStatus(200);
@@ -75,11 +73,12 @@ function getNewToken(oAuth2Client, callback, req) {
         access_type: 'offline',
         scope: SCOPES,
     });
-    console.log('Authorize this app by visiting this url:', authUrl);
+    
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
+    
     rl.question('Enter the code from that page here: ', (code) => {
         rl.close();
         oAuth2Client.getToken(code, (err, token) => {

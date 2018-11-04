@@ -7,7 +7,6 @@ const router = express.Router();
  */
 router.get('/:id', (req, res) => {
     console.log('in /api/detail GET');
-    // console.log('id :', req.params.id);
 
     const selectEventDetail = `
         SELECT
@@ -107,7 +106,6 @@ router.put('/update', (req, res) => {
         ]), 
         pool.query(deleteEventFriend, [ req.body.id ])
     ]).then(() => {
-        console.log(req.body.selectedFriends)
         const insertFriends = req.body.selectedFriends.map(friend => (
             pool.query(insertEventFriend, [
                 req.body.id, 
@@ -116,7 +114,7 @@ router.put('/update', (req, res) => {
                 friend.attend_cd
             ])
         ));
-        console.log(insertFriends)
+        
         Promise.all(insertFriends)
             .then(() => {
                 res.sendStatus(200);
