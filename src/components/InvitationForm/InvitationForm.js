@@ -250,6 +250,19 @@ class InvitationForm extends Component {
         }
     }
 
+    handleAllCheckedClick = event => {
+        const selectedFriends = this.state.selectedFriends.map(friend => {
+            return { ...friend, checked: event.target.checked, };
+        });
+        
+        let checkboxes = document.getElementsByClassName('checkbox');
+        for(let checkbox of checkboxes){
+            checkbox.checked = event.target.checked;
+        }
+
+        this.setState({ selectedFriends: [...selectedFriends,] });
+    }
+
     // get group and friend lists from redux and saga
     componentDidMount = () => {
         this.props.dispatch({ type: 'GROUP_LIST' });
@@ -353,7 +366,10 @@ class InvitationForm extends Component {
                             <Table id="selectedFriendList">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className={classes.center}>Secret<br />Message</TableCell>
+                                        <TableCell className={classes.center}>
+                                            Secret<br />Message<br />
+                                            <input type="checkbox" onChange={this.handleAllCheckedClick} />
+                                        </TableCell>
                                         <TableCell className={classes.center}>Name</TableCell>
                                         <TableCell className={classes.center}>Delete</TableCell>
                                     </TableRow>
@@ -361,7 +377,7 @@ class InvitationForm extends Component {
                                 <TableBody>
                                     {this.state.selectedFriends.map(friend =>
                                         <TableRow key={friend.id}>
-                                            <TableCell className={classes.center}><input type="checkbox" value={friend.checked} onClick={this.handleCheckedClick(friend.id)} /></TableCell>
+                                            <TableCell className={classes.center}><input type="checkbox" className="checkbox" value={friend.checked} onClick={this.handleCheckedClick(friend.id)} /></TableCell>
                                             <TableCell className={classes.friendName}>{friend.friend_name}</TableCell>
                                             <TableCell className={classes.center}><button onClick={this.handleDeleteClick(friend.id)}>Delete</button></TableCell>
                                         </TableRow>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Chart from 'chart.js';
 
 const year = ['2018', '2019'];
 const month = [
@@ -16,15 +15,6 @@ const month = [
     { name: 'Oct', value: '10'}, 
     { name: 'Nov', value: '11'}, 
     { name: 'Dec', value: '12'}
-];
-const day = [
-    { name: 'Sun', value: '0' },
-    { name: 'Mon', value: '1' }, 
-    { name: 'Tue', value: '2' }, 
-    { name: 'Wed', value: '3' }, 
-    { name: 'Thu', value: '4' }, 
-    { name: 'Fri', value: '5' }, 
-    { name: 'Sat', value: '6' }
 ];
 const date = new Date();
 

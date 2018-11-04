@@ -46,7 +46,7 @@ class EventDetail extends Component {
         const classes = this.props.classes;
         return (
             <div>
-                <h2>Event Detail Page</h2>
+                <br />
                 <div className={classes.displayFlex}>
                     <div className={classes.detailFrame}>
                         <div className={classes.title}><strong>{detail.title}</strong></div>

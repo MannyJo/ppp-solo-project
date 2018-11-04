@@ -243,6 +243,12 @@ class InvitationFormUpdate extends Component {
         });
     }
 
+    preventEnter = event => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    }
+
     handleSubmitClick = event => {
         event.preventDefault();
 
@@ -339,6 +345,7 @@ class InvitationFormUpdate extends Component {
                             value={this.state.location}
                             onChange={this.handleChangeFor('location')}
                             className={classes.input}
+                            onKeyPress={this.preventEnter}
                         />
                         <div style={{ width: '535px', height: '400px' }}>
                             <Map
