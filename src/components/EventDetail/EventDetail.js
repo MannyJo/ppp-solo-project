@@ -103,9 +103,9 @@ class EventDetail extends Component {
                                 </div>
                                 &nbsp;&nbsp;
                                 <div className={classes.caption}>
-                                    <span className={classes.grey}>* No answers/Maybe</span>&nbsp;&nbsp;
-                                    <span className={classes.red}>* Don't go</span>&nbsp;&nbsp;
-                                    <span className={classes.blue}>* Attend</span>
+                                    <span className={classes.grey}>* No response/Maybe</span>&nbsp;&nbsp;
+                                    <span className={classes.red}>* Not going</span>&nbsp;&nbsp;
+                                    <span className={classes.blue}>* Attending</span>
                                 </div>
                             </div>
                             {members.map(member =>
