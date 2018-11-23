@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import EventList from '../EventList/EventList';
 
-const styles = theme => ({
+const styles = () => ({
     subTitle: {
         marginLeft: '12vw',
         fontSize: '20px',

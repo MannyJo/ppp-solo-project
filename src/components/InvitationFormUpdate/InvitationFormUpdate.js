@@ -19,7 +19,7 @@ let markers = [];
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
-const styles = theme => ({
+const styles = () => ({
     form: {
         textAlign: 'left',
         marginBottom: '10px',

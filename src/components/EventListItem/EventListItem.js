@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
 import swal from 'sweetalert2';
 
-const styles = theme => ({
+const styles = () => ({
     center: {
         textAlign: 'center',
     },
