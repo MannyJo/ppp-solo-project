@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './CustomDialog.css';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 class CustomDialog extends Component {
     handleClose = () => {
+        // Set dialog's open data false
         this.props.dispatch({ type: 'CLOSE_DIALOG' });
     }
 
@@ -21,18 +18,9 @@ class CustomDialog extends Component {
                 onClose={this.handleClose}
                 scroll='paper'
             >
-                {/* <DialogTitle>Subscribe</DialogTitle> */}
                 <DialogContent>
                     <ComponentToProtect />
                 </DialogContent>
-                {/* <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={this.handleClose} color="primary">
-                        Update
-                    </Button>
-                </DialogActions> */}
             </Dialog>
         );
     }

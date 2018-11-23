@@ -14,7 +14,7 @@ import { Map, GoogleApiWrapper } from 'google-maps-react';
 import Send from '@material-ui/icons/Send';
 import swal from 'sweetalert2';
 
-const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
+const API_KEY = window.sessionStorage.getItem('MAP_KEY');
 let markers = [];
 
 class InvitationForm extends Component {

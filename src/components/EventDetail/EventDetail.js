@@ -10,7 +10,7 @@ import styles from './EventDetailStyles';
 import InvitationFormUpdate from '../InvitationFormUpdate/InvitationFormUpdate';
 import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
 
-const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
+const API_KEY = window.sessionStorage.getItem('MAP_KEY');
 
 class EventDetail extends Component {
     state = {

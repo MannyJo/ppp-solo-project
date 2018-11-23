@@ -35,8 +35,11 @@ class Admin extends Component {
     }
 
     componentDidMount = () => {
+        // Get total user count
         this.props.dispatch({ type: 'GET_USER_COUNT' });
+        // Get selected year's data
         this.props.dispatch({ type: 'GET_USER_DATA_YEAR', payload: date.getFullYear() });
+        // Get selected month's data
         this.props.dispatch({ type: 'GET_USER_DATA_MONTH', payload: { year: date.getFullYear(), month: date.getMonth()+1 }});
     }
 

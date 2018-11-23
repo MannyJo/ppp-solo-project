@@ -7,7 +7,7 @@ import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
 import styles from './GuestPageStyles';
 import swal from 'sweetalert2';
 
-const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
+const API_KEY = window.sessionStorage.getItem('MAP_KEY');
 const id = Number(window.location.hash.split('/').pop());
 
 class GuestPage extends Component {

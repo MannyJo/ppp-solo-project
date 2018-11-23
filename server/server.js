@@ -17,6 +17,7 @@ const eventDetail = require('./routes/detail.router');
 const guestRouter = require('./routes/guest.router');
 const emailRouter = require('./routes/email.router');
 const adminRouter = require('./routes/admin.router');
+const envRouter = require('./routes/env.router');
 
 // Body parser middleware
 app.use(fileUpload());
@@ -39,6 +40,7 @@ app.use('/api/detail', eventDetail);
 app.use('/api/guest', guestRouter);
 app.use('/api/email', emailRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/env', envRouter);
 
 // Serve static files
 app.use(express.static('build'));

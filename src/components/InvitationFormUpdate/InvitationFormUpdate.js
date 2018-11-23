@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 import swal from 'sweetalert2';
 
-const API_KEY = 'AIzaSyA8ALSMNJnujiOFPjfzNmT8CzBEVdqIsj4';
+const API_KEY = window.sessionStorage.getItem('MAP_KEY');
 let markers = [];
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
