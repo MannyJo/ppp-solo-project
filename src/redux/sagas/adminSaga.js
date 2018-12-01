@@ -51,6 +51,7 @@ function* getUserDataYear(action) {
         const response = yield call(axios.get, `/api/admin/${year}`);
         const userData = response.data ;
 
+        // this makes the chart not to show previous data
         if(chart1) {
             chart1.destroy();
         }

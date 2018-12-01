@@ -9,7 +9,6 @@ import eventDetail from './eventDetailReducer';
 import guestInfo from './guestReducer';
 import dialogOpen from './dialogReducer';
 import userCount from './adminReducer';
-import mapKey from './envReducer';
 
 // Lets make a bigger object for our store, with the objects from our reducers.
 // This is what we get when we use 'state' inside of 'mapStateToProps'
@@ -24,7 +23,6 @@ const rootReducer = combineReducers({
   guestInfo,
   dialogOpen,
   userCount,
-  mapKey,
 });
 
 export default rootReducer;

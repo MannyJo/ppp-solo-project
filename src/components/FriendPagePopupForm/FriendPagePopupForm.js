@@ -45,13 +45,15 @@ class FriendPagePopupForm extends Component {
         });
     }
 
+    // if update value is true, then update friend's info
+    // otherwise, add new friend
     handleSubmit = event => {
         event.preventDefault();
         if (this.props.update) {
             this.props.dispatch({ type: 'UPDATE_FRIEND', payload: this.state });
             swal({
                 title: 'Updated!',
-                text: 'Your friend info has been updated.',
+                text: 'Your friend\'s info has been updated.',
                 type: 'success',
                 timer: 1000,
                 showCloseButton: false,
@@ -69,7 +71,7 @@ class FriendPagePopupForm extends Component {
                 this.props.dispatch({ type: 'ADD_FRIEND', payload: this.state });
                 swal({
                     title: 'Added!',
-                    text: 'Your friend info has been added.',
+                    text: 'Your friend\'s info has been added.',
                     type: 'success',
                     timer: 1000,
                     showCloseButton: false,

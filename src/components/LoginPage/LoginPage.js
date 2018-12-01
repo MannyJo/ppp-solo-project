@@ -8,7 +8,7 @@ class LoginPage extends Component {
     password: '',
   };
 
-  login = (event) => {
+  login = event => {
     event.preventDefault();
 
     if (this.state.password && this.state.userEmail) {
@@ -24,7 +24,7 @@ class LoginPage extends Component {
     }
   } // end login
 
-  handleInputChangeFor = propertyName => (event) => {
+  handleInputChangeFor = propertyName => event => {
     this.setState({
       [propertyName]: event.target.value,
     });

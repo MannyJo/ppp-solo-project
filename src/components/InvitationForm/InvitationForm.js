@@ -13,8 +13,9 @@ import styles from './InvitationFormStyles';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 import Send from '@material-ui/icons/Send';
 import swal from 'sweetalert2';
+import constants from '../../constants/constants';
 
-const API_KEY = window.sessionStorage.getItem('MAP_KEY');
+const API_KEY = constants.API_KEY;
 let markers = [];
 
 class InvitationForm extends Component {
@@ -78,6 +79,7 @@ class InvitationForm extends Component {
         });
     }
 
+    // when friend is clicked, put them in selected friend 
     handleCheckedClick = id => event => {
         const selectedFriends = this.state.selectedFriends.map(friend => {
             if (friend.id === id) {
@@ -94,6 +96,7 @@ class InvitationForm extends Component {
         this.setState({ [property]: event.target.value });
     }
 
+    // show image on the dom
     loadImageFile = () => {
         let ImgReader = new FileReader();
 
@@ -179,6 +182,7 @@ class InvitationForm extends Component {
         });
     }
 
+    // when map is clicked, show the formatted address on search input
     onMapClicked = (mapProps, map, clickEvent) => {
         let { google } = mapProps;
         let geocoder = new google.maps.Geocoder();
@@ -210,12 +214,14 @@ class InvitationForm extends Component {
         });
     };
 
+    // prevent page refresh when user push enter button
     preventEnter = event => {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     }
 
+    // go back to main page
     sendToMain = event => {
         event.preventDefault();
         this.props.history.goBack();
@@ -250,6 +256,7 @@ class InvitationForm extends Component {
         }
     }
 
+    // click all checkboxes
     handleAllCheckedClick = event => {
         const selectedFriends = this.state.selectedFriends.map(friend => {
             return { ...friend, checked: event.target.checked, };

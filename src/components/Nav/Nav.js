@@ -49,13 +49,13 @@ class Nav extends Component {
     const { classes } = this.props;
     return (
       <div className="nav">
-        {!window.location.hash.includes('guest') ?
+        { // if it is not guest page, show navigation button
+          !window.location.hash.includes('guest') ?
           <>
             <Link to="/main">
               <h2 className="nav-title">Party Pooper Planner</h2>
             </Link>
             <div className="nav-right">
-              {/* Show the link to the info page and the logout button if the user is logged in */}
               {this.props.user.id && (
                 <>
                   <IconButton

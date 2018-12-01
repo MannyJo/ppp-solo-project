@@ -31,6 +31,7 @@ class FriendPage extends Component {
         });
     }
 
+    // friend delete function
     handleDeleteClick = friend => () => {
         swal({
             title: 'Are you sure?',
@@ -52,28 +53,33 @@ class FriendPage extends Component {
         });
     }
 
+    // when add(+) button is clicked, show popup dialog to add new friend
     handleAddClick = () => {
         this.setState({ update: false });
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
-    handleUpdateFriend = friend => event => {
+    // can update friend's info
+    handleUpdateFriend = friend => () => {
         this.setState({ update: true });
         this.props.dispatch({ type: 'UPDATE_FRIEND_INFO', payload: friend });
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
+    // By clicking group name, user can see the group's members
     searchFriendByGroupId = event => {
         this.setState({ groupId: event.target.value });
         this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: { ...this.state, groupId: event.target.value } });
     }
 
+    // can search friends with their name
     searchFriendByKeyword = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'FRIEND_LIST_BY_KEYWORD', payload: this.state });
         this.setState({ searchWord: '' });
     }
 
+    // get group and friend list
     componentDidMount = () => {
         this.props.dispatch({ type: 'GROUP_LIST' });
         this.props.dispatch({ type: 'FRIEND_LIST' });

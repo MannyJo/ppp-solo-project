@@ -9,9 +9,10 @@ class RegisterPage extends Component {
     password: '',
   };
 
-  registerUser = (event) => {
+  registerUser = event => {
     event.preventDefault();
 
+    // there are no missing parts, allow user to register
     if (this.state.username && this.state.password && this.state.userEmail) {
       this.props.dispatch({
         type: 'REGISTER',
@@ -26,7 +27,7 @@ class RegisterPage extends Component {
     }
   } // end registerUser
 
-  handleInputChangeFor = propertyName => (event) => {
+  handleInputChangeFor = propertyName => event => {
     this.setState({
       [propertyName]: event.target.value,
     });
@@ -100,9 +101,7 @@ class RegisterPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  errors: state.errors,
-});
+const mapStateToProps = ({errors}) => ({errors});
 
 export default connect(mapStateToProps)(RegisterPage);
 

@@ -6,8 +6,9 @@ import Button from '@material-ui/core/Button';
 import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
 import styles from './GuestPageStyles';
 import swal from 'sweetalert2';
+import constants from '../../constants/constants';
 
-const API_KEY = window.sessionStorage.getItem('MAP_KEY');
+const API_KEY = constants.API_KEY;
 const id = Number(window.location.hash.split('/').pop());
 
 class GuestPage extends Component {
@@ -18,6 +19,7 @@ class GuestPage extends Component {
         selectedPlace: {},
     }
 
+    // guest login function
     handleLoginClick = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'VERIFY_GUEST', payload: { email: this.state.email, id: id } });
@@ -27,10 +29,7 @@ class GuestPage extends Component {
         this.setState({ email: event.target.value });
     }
 
-    changeUser = () => {
-        this.setState({ email: 'mansangjo2018@gmail.com' });
-    }
-
+    // when marker is clicked, show its information
     onMarkerClick = (props, marker, e) => {
         this.setState({
             selectedPlace: props,
@@ -39,6 +38,7 @@ class GuestPage extends Component {
         });
     }
 
+    // send RSVP answer
     clickAnswer = attendCd => () => {
         this.props.dispatch({ 
             type: 'SEND_ATTEND_CD', 
@@ -50,6 +50,7 @@ class GuestPage extends Component {
             } 
         });
 
+        // this alert will be disappear in 1 sec
         swal({
             title: 'Updated!',
             text: 'Your reply has been updated.',
@@ -71,15 +72,11 @@ class GuestPage extends Component {
         return (
             <div>
                 {
+                    // when user is verified, show the invitation
                     !this.props.isVerified ?
                         (
                             <form onSubmit={this.handleLoginClick} className={classes.guestLoginFrame}>
-                                <label
-                                    htmlFor="guestLogin"
-                                    onClick={this.changeUser}
-                                >
-                                    Email
-                                </label>
+                                <label htmlFor="guestLogin">Email</label>
                                 <input
                                     type="email" id="guestLogin" value={this.state.email}
                                     onChange={this.handleChange}
@@ -105,6 +102,7 @@ class GuestPage extends Component {
                                     <div><img src={detail.img_url} className={classes.image} alt={detail.title} /></div>
                                     <div className={classes.message}>{detail.message}</div>
                                     {
+                                        // this only shows to selected people
                                         detail.show_secret ?
                                             <div className={classes.secretMessage}>{detail.secret_message}</div> :
                                             null
@@ -156,6 +154,7 @@ class GuestPage extends Component {
                                         </div>
                                     }
                                     {
+                                        // if guest didn't answer yet, show answer buttons
                                         detail.attend_cd === null?
                                         <div>
                                             <p>Will you attend?</p>

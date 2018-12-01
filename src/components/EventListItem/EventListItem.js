@@ -22,6 +22,7 @@ const styles = () => ({
 });
 
 class EventList extends Component {
+    // event delete function
     handleDeleteClick = deleteEvent => () => {
         swal({
             title: 'Are you sure?',
@@ -43,6 +44,7 @@ class EventList extends Component {
         });
     }
 
+    // when event is clicked, send to the detail page
     sendToDetail = () => {
         this.props.history.push(`/detail/${this.props.event.id}`);
     }

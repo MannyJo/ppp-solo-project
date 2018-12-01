@@ -1,16 +1,15 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-// worker Saga: will be fired on "LOGIN" actions
+const config = {
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
+};
+
 function* loginUser(action) {
   try {
     // clear any existing error on the login page
     yield put({ type: 'CLEAR_LOGIN_ERROR' });
-
-    const config = {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
 
     // send the action.payload as the body
     // the config includes credentials which
@@ -35,14 +34,8 @@ function* loginUser(action) {
   }
 }
 
-// worker Saga: will be fired on "LOGOUT" actions
-function* logoutUser(action) {
+function* logoutUser() {
   try {
-    const config = {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
-
     // the config includes credentials which
     // allow the server session to recognize the user
     // when the server recognizes the user session

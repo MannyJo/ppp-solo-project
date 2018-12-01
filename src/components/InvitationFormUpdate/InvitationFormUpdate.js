@@ -13,8 +13,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 import swal from 'sweetalert2';
+import constants from '../../constants/constants';
 
-const API_KEY = window.sessionStorage.getItem('MAP_KEY');
+const API_KEY = constants.API_KEY;
 let markers = [];
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;

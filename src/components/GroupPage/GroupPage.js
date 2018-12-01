@@ -31,6 +31,7 @@ class GroupPage extends Component {
         });
     }
 
+    // delete group function
     handleDeleteClick = group => () => {
         swal({
             title: 'Are you sure?',
@@ -70,6 +71,7 @@ class GroupPage extends Component {
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
+    // user can search group by keyword
     searchGroup = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'GROUP_LIST_BY_KEYWORD', payload: this.state.searchWord })

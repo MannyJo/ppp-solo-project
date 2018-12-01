@@ -24,11 +24,13 @@ class Admin extends Component {
         month: (date.getMonth()+1),
     }
 
+    // when user clicks year select box, chart changes
     handleChangeForYear = event => {
         this.setState({ year: event.target.value });
         this.props.dispatch({ type: 'GET_USER_DATA_YEAR', payload: event.target.value });
     }
 
+    // when user clicks month select box, chart changes
     handleChangeForMonth = property => event => {
         this.setState({ [property]: event.target.value });
         this.props.dispatch({ type: 'GET_USER_DATA_MONTH', payload: { ...this.state, [property]: event.target.value }});

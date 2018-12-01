@@ -9,8 +9,9 @@ import Button from '@material-ui/core/Button'
 import styles from './EventDetailStyles';
 import InvitationFormUpdate from '../InvitationFormUpdate/InvitationFormUpdate';
 import { Map, InfoWindow, GoogleApiWrapper, Marker } from 'google-maps-react';
+import constants from '../../constants/constants';
 
-const API_KEY = window.sessionStorage.getItem('MAP_KEY');
+const API_KEY = constants.API_KEY;
 
 class EventDetail extends Component {
     state = {
@@ -19,14 +20,17 @@ class EventDetail extends Component {
         selectedPlace: {},
     }
 
+    // go to previous page
     handleBackClick = () => {
         this.props.history.goBack();
     }
 
+    // open update popup dialog
     handleUpdateClick = () => {
         this.props.dispatch({ type: 'OPEN_DIALOG' });
     }
 
+    // when marker on the map is clicked, show its information
     onMarkerClick = (props, marker, e) => {
         this.setState({
             selectedPlace: props,

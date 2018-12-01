@@ -29,6 +29,7 @@ class EventList extends Component {
         });
     }
 
+    // when select box is clicked, change chart data
     searchEventByClick = property => event => {
         switch (property) {
             case 'year':
@@ -44,16 +45,19 @@ class EventList extends Component {
         this.props.dispatch({ type: 'EVENT_LIST_BY_KEYWORD', payload: {...this.state, [property]: event.target.value }});
     }
 
+    // search events by keyword
     searchEventByKeyword = event => {
         event.preventDefault();
         this.props.dispatch({ type: 'EVENT_LIST_BY_KEYWORD', payload: this.state });
     }
 
+    // when new(+) button is clicked, send to new invitation page
     handleNewClick = () => {
         this.props.history.push('/new');
     }
 
     componentDidMount = () => {
+        // get all event list
         this.props.dispatch({ type: 'EVENT_LIST' });
     }
 
