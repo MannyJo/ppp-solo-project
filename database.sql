@@ -41,3 +41,9 @@ CREATE TABLE event_friend (
     show_secret BOOLEAN NOT NULL,
 	attend_cd INTEGER /* 0:NO, 1:YES, 2:DON'T KNOW */
 );
+
+CREATE TABLE "gmail_credentials" (
+	"id" SERIAL PRIMARY KEY,
+	"name" VARCHAR(200) NOT NULL,
+	"content" TEXT NOT NULL
+);
