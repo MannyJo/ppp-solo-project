@@ -66,6 +66,3 @@ package-lock.json
 
 # credentials
 credential.sql
-
-# Api key
-constants.js
